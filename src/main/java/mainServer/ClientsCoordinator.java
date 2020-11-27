@@ -29,6 +29,7 @@ public class ClientsCoordinator {
     }
 
     public void addClient(Client client) {
+        clients.add(client);
     }
 
     public void verifyLoggingClient(Socket s, String name, String ip, String pass) {

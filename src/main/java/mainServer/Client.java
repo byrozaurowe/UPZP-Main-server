@@ -11,7 +11,6 @@ public class Client {
         return ipAddress;
     }
 
-
     public Socket getSocket() {
         return socket;
     }
