@@ -1,0 +1,6 @@
+table Client {
+  name:string;
+  ipAddress:string;
+}
+
+root_type Client;
