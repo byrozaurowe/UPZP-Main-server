@@ -22,6 +22,7 @@ table Game {
   teams:[Team];
   city:string;
   host:int;
+  clientsMax:int;
 }
 
 root_type Game;

@@ -1,2 +1,5 @@
-Error
+table Error {
+    message:string;
+}
 
+root_type Error;
