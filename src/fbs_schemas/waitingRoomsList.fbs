@@ -1,0 +1,12 @@
+table WaitingRoom {
+    id:int;
+    city:string;
+    host:string;
+    clients:int;
+}
+
+table WaitingRoomsList {
+    waitingRoom:[WaitingRoom];
+}
+
+root_type WaitingRoomsList;

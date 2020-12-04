@@ -1,0 +1,7 @@
+table LoggingClient {
+  name:string;
+  password:string;
+  ipAddress:string;
+}
+
+root_type LoggingClient;

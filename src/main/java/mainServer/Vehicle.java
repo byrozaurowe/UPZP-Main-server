@@ -2,7 +2,7 @@ package mainServer;
 
 public class Vehicle {
     public enum VehicleType {
-        CAR, CYCLIST, PEDESTRIAN;
+        Car, Cyclist, Pedestrian;
     }
     Enum<VehicleType> type;
     int velocity;

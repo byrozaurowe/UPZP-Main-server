@@ -1,0 +1,5 @@
+table ServerStatus {
+    status:bool;
+}
+
+root_type ServerStatus;

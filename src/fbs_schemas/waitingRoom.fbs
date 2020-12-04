@@ -1,0 +1,25 @@
+enum VehicleType:byte {Pedestrian, Cyclist, Car}
+
+table Clients {
+    name:string;
+}
+
+table Vehicle {
+    vehicleType:VehicleType;
+    velocity:int;
+    free:bool;
+}
+
+table Team {
+    clients:[Client];
+    vehicles:[Vehicle];
+}
+
+table WaitingRoom {
+  id:int;
+  teams:[Team];
+  city:string;
+  host:string;
+}
+
+root_type WaitingRoom;

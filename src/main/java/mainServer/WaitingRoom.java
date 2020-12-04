@@ -2,6 +2,7 @@ package mainServer;
 
 public class WaitingRoom {
 
+    private int id;
     private Team team1;
     private Team team2;
     private String city;

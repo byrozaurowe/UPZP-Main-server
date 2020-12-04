@@ -1,0 +1,5 @@
+table NewWaitingRoom {
+    city:string;
+}
+
+root_type NewWaitingRoom;

@@ -1,0 +1,5 @@
+table GameStatus {
+    status:bool;
+}
+
+root_type GameStatus;
