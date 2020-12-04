@@ -2,7 +2,9 @@ table WaitingRoom {
     id:int;
     city:string;
     host:string;
-    clients:int;
+    clientsLogged:int;
+    clientsMax:int;
+    status:int;
 }
 
 table WaitingRoomsList {

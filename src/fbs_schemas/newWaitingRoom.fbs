@@ -1,5 +1,7 @@
 table NewWaitingRoom {
     city:string;
+    name:string;
+    clientsMax:int;
 }
 
 root_type NewWaitingRoom;

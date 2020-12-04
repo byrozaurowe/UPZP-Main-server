@@ -2,24 +2,24 @@ enum VehicleType:byte {Pedestrian, Cyclist, Car}
 
 table Clients {
     name:string;
+    id:int;
+    vehicle:Vehicle;
 }
 
 table Vehicle {
     vehicleType:VehicleType;
     velocity:int;
-    free:bool;
 }
 
 table Team {
     clients:[Client];
-    vehicles:[Vehicle];
 }
 
 table WaitingRoom {
   id:int;
   teams:[Team];
   city:string;
-  host:string;
+  host:int;
 }
 
 root_type WaitingRoom;

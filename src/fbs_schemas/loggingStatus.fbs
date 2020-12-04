@@ -1,5 +1,0 @@
-table LoggingStatus {
-    status:bool;
-}
-
-root_type LoggingStatus;

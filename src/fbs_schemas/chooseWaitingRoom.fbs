@@ -1,0 +1,5 @@
+table ChooseWaitingRoom {
+    id:int;
+}
+
+root_type ChooseWaitingRoom;

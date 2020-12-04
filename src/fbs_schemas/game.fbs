@@ -1,27 +1,27 @@
 enum VehicleType:byte {Pedestrian, Cyclist, Car}
 
-table Clients {
-    name:string;
-    ipAddress:string;
-    socket:int;
-}
-
 table Vehicle {
     vehicleType:VehicleType;
     velocity:int;
-    free:bool;
+}
+
+table Client {
+    name:string;
+    id:int;
+    ipAddress:string;
+    port:int;
+    vehicle:Vehicle;
 }
 
 table Team {
     clients:[Client];
-    vehicles:[Vehicle];
 }
 
 table Game {
   id:int;
   teams:[Team];
   city:string;
-  host:string;
+  host:int;
 }
 
 root_type Game;
