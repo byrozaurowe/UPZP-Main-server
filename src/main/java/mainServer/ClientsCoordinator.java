@@ -24,7 +24,6 @@ public class ClientsCoordinator {
     public void sendTo(Socket s, String packetType, Object o) {
         if(s.isClosed())
             return;
-        Packet p = new Packet(packetType, o);
 
     }
 
@@ -43,7 +42,7 @@ public class ClientsCoordinator {
     public boolean connect(Socket s) {
         loggingClients.add(new LoggingClient(s));
         System.out.println("Połączono do " + s);
-        sendTo(s, Packet.CONNECT, "Połączono poprawnie");
+
         return true;
     }
 
@@ -69,7 +68,7 @@ public class ClientsCoordinator {
         try {
             Client client = findClientByName(name);
             System.out.println("Rozłączono " + name +": " + client.getSocket());
-            sendTo(name, Packet.DISCONNECT);
+
             client.getSocket().close();
             clients.remove(client);
         } catch (NullPointerException e) {}
