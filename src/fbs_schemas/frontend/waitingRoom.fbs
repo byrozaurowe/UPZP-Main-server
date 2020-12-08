@@ -1,6 +1,8 @@
+namespace UPZP.WaitingRoom;
+
 enum VehicleType:byte {Pedestrian, Cyclist, Car}
 
-table Clients {
+table Client {
     name:string;
     id:int;
     vehicle:Vehicle;
@@ -24,3 +26,5 @@ table WaitingRoom {
 }
 
 root_type WaitingRoom;
+
+root_type Vehicle;

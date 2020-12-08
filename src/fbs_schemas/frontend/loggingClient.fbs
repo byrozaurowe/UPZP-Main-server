@@ -1,3 +1,5 @@
+namespace UPZP.LoggingClient;
+
 table LoggingClient {
   name:string;
   password:string;

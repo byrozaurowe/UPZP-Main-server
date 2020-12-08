@@ -1,3 +1,5 @@
+namespace UPZP.NewWaitingRoom;
+
 table NewWaitingRoom {
     city:string;
     name:string;

@@ -1,3 +1,5 @@
+namespace UPZP.Error;
+
 table Error {
     message:string;
 }

@@ -1,0 +1,10 @@
+1 - error: root Error
+2 - loggingClient: root LoggingClient
+3 - client: root Client
+4 - waitingRoom: root WaitingRoom
+5 - newWaitingRoom: root NewWaitingRoom
+6 - chooseWaitingRoom: root ChooseWaitingRoom
+7 - waitingRoomsList: WaitingRoomsList
+8 - waitingRoom: root Vehicle
+
+10 - game: root Game

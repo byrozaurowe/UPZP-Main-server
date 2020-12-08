@@ -1,3 +1,5 @@
+namespace UPZP.Game;
+
 enum VehicleType:byte {Pedestrian, Cyclist, Car}
 
 table Vehicle {

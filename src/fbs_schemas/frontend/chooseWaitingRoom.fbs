@@ -1,3 +1,5 @@
+namespace UPZP.ChooseWaitingRoom;
+
 table ChooseWaitingRoom {
     id:int;
 }

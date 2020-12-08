@@ -1,3 +1,5 @@
+namespace UPZP.WaitingRoomsList;
+
 table WaitingRoom {
     id:int;
     city:string;

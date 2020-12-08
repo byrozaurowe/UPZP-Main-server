@@ -1,3 +1,5 @@
+namespace UPZP.Client;
+
 table Client {
   name:string;
   ipAddress:string;
