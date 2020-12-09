@@ -26,9 +26,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Server</mainClass>
+                            <mainClass>mainServer.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
