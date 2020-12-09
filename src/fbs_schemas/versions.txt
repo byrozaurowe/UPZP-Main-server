@@ -1,10 +1,10 @@
-1 - error: root Error
-2 - loggingClient: root LoggingClient
-3 - client: root Client
-4 - waitingRoom: root WaitingRoom
-5 - newWaitingRoom: root NewWaitingRoom
-6 - chooseWaitingRoom: root ChooseWaitingRoom
-7 - waitingRoomsList: WaitingRoomsList
-8 - waitingRoom: root Vehicle
+1 - error: root FError
+2 - loggingClient: root FLoggingClient
+3 - client: root FClient
+4 - waitingRoom: root FWaitingRoom
+5 - newWaitingRoom: root FNewWaitingRoom
+6 - chooseWaitingRoom: root FChooseWaitingRoom
+7 - waitingRoomsList: FWaitingRoomsList
+8 - waitingRoom: root FVehicle
 
-10 - game: root Game
+10 - game: root FGame
