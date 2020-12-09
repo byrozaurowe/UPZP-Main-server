@@ -1,7 +1,6 @@
 package mainServer.logging;
 import mainServer.Client;
 import mainServer.Main;
-import mainServer.Packet;
 
 public class LoginHandler {
     public static void verifyIdentity(LoggingClient logClient) {
@@ -10,12 +9,12 @@ public class LoginHandler {
         String ip = logClient.getIpAddress();
         boolean isCorrect = true; // Weryfikacja w bazie danych
         if(isCorrect) {
-            Main.server.clientsCoordinator.sendTo(name, Packet.LOGIN_ACCEPTED);
+            //Main.server.clientsCoordinator.sendTo(name, Packet.LOGIN_ACCEPTED);
             Client client = new Client(name, ip, logClient.getSocket());
             signIn(client);
         }
         else {
-            Main.server.clientsCoordinator.sendTo(name, Packet.LOGIN_REJECTED);
+            //Main.server.clientsCoordinator.sendTo(name, Packet.LOGIN_REJECTED);
         }
     }
     private static void signIn(Client client) {

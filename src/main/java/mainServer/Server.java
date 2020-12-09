@@ -1,6 +1,8 @@
 package mainServer;
 
-import mainServer.TestData.Client;
+import com.google.flatbuffers.FlatBufferBuilder;
+import mainServer.schemas.*;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -42,8 +44,10 @@ public class Server implements Runnable {
                     i.remove();
                 }
             }
+        } catch (WrongPacketException e) {
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -57,17 +61,32 @@ public class Server implements Runnable {
         client.register(selector, SelectionKey.OP_READ);
     }
 
-    private void handleRead(SelectionKey key) throws IOException {
+    private void handleRead(SelectionKey key) throws WrongPacketException, IOException {
         System.out.println("Reading...");
         // create a ServerSocketChannel to read the request
         SocketChannel client = (SocketChannel) key.channel();
-
         byte[] data = new byte[1024];
         client.read(ByteBuffer.wrap(data));
-        Client clientobj = Client.getRootAsClient(ByteBuffer.wrap(data));
+        Header.handleData(data); // powinno zwrócic odpowiedź
 
-        String name = clientobj.name();
-        String ip = clientobj.ipAddress();
-        clientsCoordinator.verifyLoggingClient(client.socket(), name, ip, "");
+        testResponse(client);
+        //clientsCoordinator.verifyLoggingClient(client.socket(), name, ip, "");
     }
+
+    public void testResponse(SocketChannel client) throws IOException {
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        int someString = builder.createString("qwer");
+        Tester.startTester(builder);
+        Tester.addPos(builder, Vec3.createVec3(builder, 1.0f, 2.0f, 3.0f));
+        Tester.addSomeString(builder, someString);
+        Tester.addSomeInteger(builder, 123);
+        int test = Tester.endTester(builder);
+        builder.finish(test);
+        byte[] buf = builder.sizedByteArray();
+        Header h = new Header();
+        byte[] header = h.encode((byte)1, buf, true);
+        client.write(ByteBuffer.wrap(header));
+    }
+
+
 }
