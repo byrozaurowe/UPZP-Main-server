@@ -1,7 +1,7 @@
-namespace UPZP.Error;
+namespace UPZP.FError;
 
-table Error {
+table FError {
     message:string;
 }
 
-root_type Error;
+root_type FError;

@@ -1,7 +1,7 @@
-namespace UPZP.ChooseWaitingRoom;
+namespace UPZP.FChooseWaitingRoom;
 
-table ChooseWaitingRoom {
+table FChooseWaitingRoom {
     id:int;
 }
 
-root_type ChooseWaitingRoom;
+root_type FChooseWaitingRoom;

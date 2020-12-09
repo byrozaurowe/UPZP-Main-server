@@ -1,30 +1,30 @@
-namespace UPZP.Game;
+namespace UPZP.FGame;
 
-enum VehicleType:byte {Pedestrian, Cyclist, Car}
+enum FVehicleType:byte {Pedestrian, Cyclist, Car}
 
-table Vehicle {
-    vehicleType:VehicleType;
+table FVehicle {
+    vehicleType:FVehicleType;
     velocity:int;
 }
 
-table Client {
+table FClient {
     name:string;
     id:int;
     ipAddress:string;
     port:int;
-    vehicle:Vehicle;
+    vehicle:FVehicle;
 }
 
-table Team {
-    clients:[Client];
+table FTeam {
+    clients:[FClient];
 }
 
-table Game {
+table FGame {
   id:int;
-  teams:[Team];
+  teams:[FTeam];
   city:string;
   host:int;
   clientsMax:int;
 }
 
-root_type Game;
+root_type FGame;

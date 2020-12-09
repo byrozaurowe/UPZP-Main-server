@@ -1,8 +1,8 @@
-namespace UPZP.Client;
+namespace UPZP.FClient;
 
-table Client {
+table FClient {
   name:string;
   ipAddress:string;
 }
 
-root_type Client;
+root_type FClient;

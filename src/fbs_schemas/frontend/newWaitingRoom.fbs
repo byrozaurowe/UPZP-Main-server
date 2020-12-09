@@ -1,9 +1,9 @@
-namespace UPZP.NewWaitingRoom;
+namespace UPZP.FNewWaitingRoom;
 
-table NewWaitingRoom {
+table FNewWaitingRoom {
     city:string;
     name:string;
     clientsMax:int;
 }
 
-root_type NewWaitingRoom;
+root_type FNewWaitingRoom;

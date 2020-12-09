@@ -1,8 +1,8 @@
-namespace UPZP.LoggingClient;
+namespace UPZP.FLoggingClient;
 
-table LoggingClient {
+table FLoggingClient {
   name:string;
   password:string;
 }
 
-root_type LoggingClient;
+root_type FLoggingClient;

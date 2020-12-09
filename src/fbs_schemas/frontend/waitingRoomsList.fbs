@@ -1,6 +1,6 @@
-namespace UPZP.WaitingRoomsList;
+namespace UPZP.FWaitingRoomsList;
 
-table WaitingRoom {
+table FWaitingRoom {
     id:int;
     city:string;
     host:string;
@@ -9,8 +9,8 @@ table WaitingRoom {
     status:int;
 }
 
-table WaitingRoomsList {
-    waitingRoom:[WaitingRoom];
+table FWaitingRoomsList {
+    waitingRoom:[FWaitingRoom];
 }
 
-root_type WaitingRoomsList;
+root_type FWaitingRoomsList;

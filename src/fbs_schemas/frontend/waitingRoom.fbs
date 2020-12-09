@@ -1,30 +1,30 @@
-namespace UPZP.WaitingRoom;
+namespace UPZP.FWaitingRoom;
 
-enum VehicleType:byte {Pedestrian, Cyclist, Car}
+enum FVehicleType:byte {Pedestrian, Cyclist, Car}
 
-table Client {
+table FClient {
     name:string;
     id:int;
-    vehicle:Vehicle;
+    vehicle:FVehicle;
 }
 
-table Vehicle {
-    vehicleType:VehicleType;
+table FVehicle {
+    vehicleType:FVehicleType;
     velocity:int;
 }
 
-table Team {
-    clients:[Client];
+table FTeam {
+    clients:[FClient];
 }
 
-table WaitingRoom {
+table FWaitingRoom {
   id:int;
-  teams:[Team];
+  teams:[FTeam];
   city:string;
   host:int;
   clientsMax:int;
 }
 
-root_type WaitingRoom;
+root_type FWaitingRoom;
 
-root_type Vehicle;
+root_type FVehicle;
