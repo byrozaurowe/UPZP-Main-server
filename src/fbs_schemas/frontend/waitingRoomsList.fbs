@@ -1,4 +1,4 @@
-namespace UPZP.FWaitingRoomsList;
+namespace mainServer.schemas.FWaitingRoomsList;
 
 table FWaitingRoom {
     id:int;

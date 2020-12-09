@@ -1,4 +1,4 @@
-namespace UPZP.FError;
+namespace mainServer.schemas.FError;
 
 table FError {
     message:string;

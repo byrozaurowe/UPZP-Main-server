@@ -1,4 +1,4 @@
-namespace UPZP.FGame;
+namespace mainServer.schemas.FGame;
 
 enum FVehicleType:byte {Pedestrian, Cyclist, Car}
 

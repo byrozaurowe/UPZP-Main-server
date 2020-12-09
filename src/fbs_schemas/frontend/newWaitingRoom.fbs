@@ -1,4 +1,4 @@
-namespace UPZP.FNewWaitingRoom;
+namespace mainServer.schemas.FNewWaitingRoom;
 
 table FNewWaitingRoom {
     city:string;

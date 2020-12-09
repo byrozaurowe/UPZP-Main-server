@@ -1,4 +1,4 @@
-namespace UPZP.FLoggingClient;
+namespace mainServer.schemas.FLoggingClient;
 
 table FLoggingClient {
   name:string;
