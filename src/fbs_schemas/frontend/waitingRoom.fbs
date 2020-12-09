@@ -1,4 +1,4 @@
-namespace UPZP.FWaitingRoom;
+namespace mainServer.schemas.FWaitingRoom;
 
 enum FVehicleType:byte {Pedestrian, Cyclist, Car}
 

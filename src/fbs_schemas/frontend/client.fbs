@@ -1,4 +1,4 @@
-namespace UPZP.FClient;
+namespace mainServer.schemas.FClient;
 
 table FClient {
   name:string;
