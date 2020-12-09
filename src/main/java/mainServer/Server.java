@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -19,35 +17,46 @@ public class Server implements Runnable {
     public ClientsCoordinator clientsCoordinator;
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
+        ServerSocketChannel socket;
         try {
             selector = Selector.open();
             // We have to set connection host, port and non-blocking mode
-            ServerSocketChannel socket = ServerSocketChannel.open();
+            socket = ServerSocketChannel.open();
             ServerSocket serverSocket = socket.socket();
             serverSocket.bind(new InetSocketAddress(4444));
             socket.configureBlocking(false);
             int ops = socket.validOps();
             socket.register(selector, ops, null);
-            while (true) {
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return;
+        }
+        while (true) {
+            try {
                 selector.select();
                 Set<SelectionKey> selectedKeys = selector.selectedKeys();
                 Iterator<SelectionKey> i = selectedKeys.iterator();
                 while (i.hasNext()) {
                     SelectionKey key = i.next();
                     if (key.isAcceptable()) {
-                    // New client has been accepted
+                        // New client has been accepted
                         handleAccept(socket, key);
                     } else if (key.isReadable()) {
-                    // We can run non-blocking operation READ on our client
+                        // We can run non-blocking operation READ on our client
                         handleRead(key);
                     }
                     i.remove();
                 }
+            } catch (WrongPacketException e) {
+                System.out.println(e.getMessage());
+
+                continue;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (WrongPacketException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
+            finally {
+                selector.selectedKeys().clear();
+            }
         }
     }
 
@@ -62,15 +71,24 @@ public class Server implements Runnable {
     }
 
     private void handleRead(SelectionKey key) throws WrongPacketException, IOException {
-        System.out.println("Reading...");
+
         // create a ServerSocketChannel to read the request
         SocketChannel client = (SocketChannel) key.channel();
         byte[] data = new byte[1024];
-        client.read(ByteBuffer.wrap(data));
-        Header.handleData(data); // powinno zwrócic odpowiedź
 
-        testResponse(client);
-        //clientsCoordinator.verifyLoggingClient(client.socket(), name, ip, "");
+        client.read(ByteBuffer.wrap(data));
+        byte[] a = new byte[1024];
+        Arrays.fill(a,(byte)0);
+        if(Arrays.equals(a, data)) {
+            //clientsCoordinator.disconnect(client.socket());
+            System.out.println("Rozłączono klienta " + client.socket().getInetAddress());
+            client.socket().close();
+        }
+        else {
+            System.out.println("Reading...");
+            Header.handleData(data); // powinno zwrócic odpowiedź
+            testResponse(client);
+        }
     }
 
     public void testResponse(SocketChannel client) throws IOException {

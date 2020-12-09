@@ -64,11 +64,29 @@ public class ClientsCoordinator {
         return null;
     }
 
+    private Client findClientBySocket(Socket s) {
+        for(Client client: clients) {
+            if(client.getSocket() == s) {
+                return client;
+            }
+        }
+        return null;
+    }
+
     public void disconnect(String name) throws IOException {
         try {
             Client client = findClientByName(name);
             System.out.println("Rozłączono " + name +": " + client.getSocket());
 
+            client.getSocket().close();
+            clients.remove(client);
+        } catch (NullPointerException e) {}
+    }
+
+    public void disconnect(Socket s) throws IOException {
+        try {
+            Client client = findClientBySocket(s);
+            System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
             clients.remove(client);
         } catch (NullPointerException e) {}
