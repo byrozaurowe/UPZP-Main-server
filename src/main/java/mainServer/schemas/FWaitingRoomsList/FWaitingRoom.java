@@ -19,37 +19,35 @@ public final class FWaitingRoom extends Table {
   public String city() { int o = __offset(6); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer cityAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
   public ByteBuffer cityInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
-  public String host() { int o = __offset(8); return o != 0 ? __string(o + bb_pos) : null; }
-  public ByteBuffer hostAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
-  public ByteBuffer hostInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
+  public int host() { int o = __offset(8); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
   public int clientsLogged() { int o = __offset(10); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
   public int clientsMax() { int o = __offset(12); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
-  public int status() { int o = __offset(14); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
+  public boolean status() { int o = __offset(14); return o != 0 ? 0!=bb.get(o + bb_pos) : false; }
 
   public static int createFWaitingRoom(FlatBufferBuilder builder,
       int id,
       int cityOffset,
-      int hostOffset,
+      int host,
       int clientsLogged,
       int clientsMax,
-      int status) {
+      boolean status) {
     builder.startTable(6);
-    FWaitingRoom.addStatus(builder, status);
     FWaitingRoom.addClientsMax(builder, clientsMax);
     FWaitingRoom.addClientsLogged(builder, clientsLogged);
-    FWaitingRoom.addHost(builder, hostOffset);
+    FWaitingRoom.addHost(builder, host);
     FWaitingRoom.addCity(builder, cityOffset);
     FWaitingRoom.addId(builder, id);
+    FWaitingRoom.addStatus(builder, status);
     return FWaitingRoom.endFWaitingRoom(builder);
   }
 
   public static void startFWaitingRoom(FlatBufferBuilder builder) { builder.startTable(6); }
   public static void addId(FlatBufferBuilder builder, int id) { builder.addInt(0, id, 0); }
   public static void addCity(FlatBufferBuilder builder, int cityOffset) { builder.addOffset(1, cityOffset, 0); }
-  public static void addHost(FlatBufferBuilder builder, int hostOffset) { builder.addOffset(2, hostOffset, 0); }
+  public static void addHost(FlatBufferBuilder builder, int host) { builder.addInt(2, host, 0); }
   public static void addClientsLogged(FlatBufferBuilder builder, int clientsLogged) { builder.addInt(3, clientsLogged, 0); }
   public static void addClientsMax(FlatBufferBuilder builder, int clientsMax) { builder.addInt(4, clientsMax, 0); }
-  public static void addStatus(FlatBufferBuilder builder, int status) { builder.addInt(5, status, 0); }
+  public static void addStatus(FlatBufferBuilder builder, boolean status) { builder.addBoolean(5, status, false); }
   public static int endFWaitingRoom(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;

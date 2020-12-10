@@ -3,10 +3,10 @@ namespace mainServer.schemas.FWaitingRoomsList;
 table FWaitingRoom {
     id:int;
     city:string;
-    host:string;
+    host:int;
     clientsLogged:int;
     clientsMax:int;
-    status:int;
+    status:bool;
 }
 
 table FWaitingRoomsList {

@@ -2,12 +2,18 @@ package mainServer;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import mainServer.schemas.FError.FError;
+import mainServer.schemas.FGame.FTeam;
 import mainServer.schemas.FLoggingClient.FLoggingClient;
+import mainServer.schemas.FWaitingRoomsList.FWaitingRoom;
+import mainServer.schemas.FWaitingRoomsList.FWaitingRoomsList;
 import mainServer.schemas.Tester;
 import mainServer.schemas.Vec3;
 
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class Serialization {
 
@@ -23,12 +29,16 @@ public class Serialization {
         return false;
     }
 
-    byte[] serialize(byte[] data, int version) {
+    byte[] serialize(Object data, int version) {
         switch(version) {
             case 1:
                 return serializeError(data);
             case 2:
                 break;
+            case 7:
+                serializeWaitingRoomsList(data);
+            case 8:
+                serializeWaitingRoom(data);
             default:
                 return serializeTestData();
         }
@@ -49,7 +59,7 @@ public class Serialization {
         }
     }
 
-    private byte[] serializeError(byte[] msg) {
+    private byte[] serializeError(Object msg) {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         int message = builder.createString(msg.toString());
         FError.startFError(builder);
@@ -57,6 +67,34 @@ public class Serialization {
         int test = FError.endFError(builder);
         builder.finish(test);
         return builder.sizedByteArray();
+    }
+
+    private byte[] serializeWaitingRoomsList(Object list) {
+         FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        FWaitingRoomsList.startFWaitingRoomsList(builder);
+        for (WaitingRoom room : (ArrayList<WaitingRoom>)list) {
+            int city = builder.createString(room.getCity());
+            FWaitingRoomsList.addWaitingRoom(builder, FWaitingRoom.createFWaitingRoom(builder, room.getId(), city, room.getHost(), room.getClientsLoggedVal(), room.getClientsMax(), room.getStatus()));
+        }
+        int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
+        builder.finish(readyList);
+        return builder.sizedByteArray();
+    }
+
+    private byte[] serializeWaitingRoom(Object data) {
+         /* zaczęłam i nie skończyłam
+
+         WaitingRoom room = (WaitingRoom)data;
+         FlatBufferBuilder builder = new FlatBufferBuilder(0);
+         mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.startTeamsVector(builder, 2);
+        int[] teams = FTeam.
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, )
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder,
+                mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, ));
+    */
+        return null;
     }
 
     private byte[] serializeTestData() {

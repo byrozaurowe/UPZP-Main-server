@@ -8,6 +8,16 @@ public class WaitingRoom {
     private String city;
     private Chat chat;
     private Client host;
+    private int clientsMax;
+    private boolean status;
+
+    public int getId() { return id; }
+    public Team[] getTeams() { Team[] teams = new Team[]{team1, team2}; return teams; }
+    public String getCity() { return city; }
+    public int getHost() { return host.getId(); }
+    public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
+    public int getClientsMax() { return clientsMax; }
+    public boolean getStatus() { return status; }
 
     public boolean joinTeam(Client client) {
         if (team1.clientsSize() <= team2.clientsSize()) {
@@ -47,5 +57,6 @@ public class WaitingRoom {
         team1 = new Team();
         team2 = new Team();
         chat = new Chat();
+        status = false;
     }
 }

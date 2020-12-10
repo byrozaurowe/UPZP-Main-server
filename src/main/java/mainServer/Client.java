@@ -16,9 +16,12 @@ public class Client {
         return socket;
     }
 
+    public int getId() { return id; }
+
     private String name;
     private InetAddress ipAddress;
     private Socket socket;
+    private int id;
 
     public Client(String name, InetAddress ipAddress, Socket socket) {
         this.name = name;

@@ -15,8 +15,10 @@ import java.util.Set;
 public class Server implements Runnable {
     private static Selector selector = null;
     public ClientsCoordinator clientsCoordinator;
+    public WaitingRoomsCoordinator waitingRoomsCoordinator;
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
+        waitingRoomsCoordinator = new WaitingRoomsCoordinator();
         ServerSocketChannel socket;
         try {
             selector = Selector.open();
