@@ -37,17 +37,6 @@ public class Header {
         }
     }
 
-    /** Obsługuje pakiet otrzymany od klienta
-     * @param receivedData tablica bajtów opisująca pakiet
-     * @throws WrongPacketException błąd podczas odkodowywania pakietu
-     */
-    static void handleData(byte[] receivedData) throws WrongPacketException {
-        Header h = new Header();
-        Return returned = h.decode(receivedData);
-        Serialization s = new Serialization();
-        s.deserialize(returned.bytes, returned.version);
-    }
-
     /** Odkodowywyanie headera
      * @param receivedData otrzymane dane
      * @return przesyłany obiekt
@@ -100,7 +89,7 @@ public class Header {
     byte[] encode(byte version, byte[] data, boolean isChecksum) {
         this.version = version;
         this.isChecksum = isChecksum;
-        ArrayList<Byte> encoded = new ArrayList<Byte>();
+        ArrayList<Byte> encoded = new ArrayList<>();
         encoded.add(BEGINSEQ[0]);
         encoded.add(BEGINSEQ[1]);
 
@@ -164,25 +153,5 @@ public class Header {
         byte[] subarray = new byte[end - beg + 1];
         if (subarray.length >= 0) System.arraycopy(array, beg + 0, subarray, 0, subarray.length);
         return subarray;
-    }
-
-    public static void main(String[] args) throws Exception {
-        FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        int someString = builder.createString("qwer");
-        Tester.startTester(builder);
-        Tester.addPos(builder, Vec3.createVec3(builder, 1.0f, 2.0f, 3.0f));
-        Tester.addSomeString(builder, someString);
-        Tester.addSomeInteger(builder, 123);
-        int test = Tester.endTester(builder);
-        builder.finish(test);
-        byte[] buf = builder.sizedByteArray();
-        Header h = new Header();
-        byte[] encoded = h.encode((byte)1, buf, true);
-        if(Arrays.equals(buf, h.decode(encoded).bytes)){
-            System.out.println("Poprawnie odkodowano zakodowane dane!");
-        }
-        else {
-            System.out.println("Niepoprawnie odkodowano zakodowane dane!");
-        }
     }
 }

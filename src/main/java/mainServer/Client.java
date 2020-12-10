@@ -1,5 +1,6 @@
 package mainServer;
 
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client {
@@ -7,7 +8,7 @@ public class Client {
         return name;
     }
 
-    public String getIpAddress() {
+    public InetAddress getIpAddress() {
         return ipAddress;
     }
 
@@ -16,9 +17,10 @@ public class Client {
     }
 
     private String name;
-    private String ipAddress;
+    private InetAddress ipAddress;
     private Socket socket;
-    public Client(String name, String ipAddress, Socket socket) {
+
+    public Client(String name, InetAddress ipAddress, Socket socket) {
         this.name = name;
         this.ipAddress = ipAddress;
         this.socket = socket;

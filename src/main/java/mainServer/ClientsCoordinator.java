@@ -13,8 +13,8 @@ public class ClientsCoordinator {
     private ArrayList<LoggingClient> loggingClients;
 
     ClientsCoordinator() {
-        clients = new ArrayList<Client>();
-        loggingClients = new ArrayList<LoggingClient>();
+        clients = new ArrayList<>();
+        loggingClients = new ArrayList<>();
     }
 
     public void sendTo(String name, String packetType) {
@@ -27,16 +27,16 @@ public class ClientsCoordinator {
 
     }
 
-    public void addClient(Client client) {
+    public void addClient(Client client, LoggingClient loggingClient) {
         clients.add(client);
+        loggingClients.remove(loggingClient);
     }
 
-    public void verifyLoggingClient(Socket s, String name, String ip, String pass) {
+    public boolean verifyLoggingClient(Socket s, String name, String pass) {
         LoggingClient client = findLogClientBySocket(s);
         client.setName(name);
-        client.setIpAddress(ip);
         client.setPassword(pass);
-        LoginHandler.verifyIdentity(client);
+        return LoginHandler.verifyIdentity(client);
     }
 
     public boolean connect(Socket s) {

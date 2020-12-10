@@ -1,19 +1,16 @@
 package mainServer.logging;
 
+import java.net.InetAddress;
 import java.net.Socket;
 
 /** Klasa obiektu klienta, który chce się zalogować */
 public class LoggingClient {
     /** Adres ip użytkownika */
-    private String ipAddress;
+    private InetAddress ipAddress;
     /** Nazwa użytkownika */
     private String name;
     /** Socket użytkownika */
     private Socket socket;
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -26,7 +23,7 @@ public class LoggingClient {
     /** Zahaszowane hasło */
     private String password;
 
-    public String getIpAddress() {
+    public InetAddress getIpAddress() {
         return ipAddress;
     }
 
@@ -44,5 +41,6 @@ public class LoggingClient {
 
     public LoggingClient(Socket socket) {
         this.socket = socket;
+        this.ipAddress = socket.getInetAddress();
     }
 }

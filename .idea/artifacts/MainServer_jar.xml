@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MainServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MainServer_jar</output-path>
+    <root id="archive" name="MainServer.jar">
+      <element id="module-output" name="MainServer" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/flatbuffers/flatbuffers-java/1.12.0/flatbuffers-java-1.12.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

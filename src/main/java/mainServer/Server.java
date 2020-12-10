@@ -86,25 +86,8 @@ public class Server implements Runnable {
         }
         else {
             System.out.println("Reading...");
-            Header.handleData(data); // powinno zwrócic odpowiedź
-            testResponse(client);
+            byte[] packet = PacketHandler.handleData(data, client.socket()); // powinno zwrócic odpowiedź
+            client.write(ByteBuffer.wrap(packet));
         }
     }
-
-    public void testResponse(SocketChannel client) throws IOException {
-        FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        int someString = builder.createString("qwer");
-        Tester.startTester(builder);
-        Tester.addPos(builder, Vec3.createVec3(builder, 1.0f, 2.0f, 3.0f));
-        Tester.addSomeString(builder, someString);
-        Tester.addSomeInteger(builder, 123);
-        int test = Tester.endTester(builder);
-        builder.finish(test);
-        byte[] buf = builder.sizedByteArray();
-        Header h = new Header();
-        byte[] header = h.encode((byte)1, buf, true);
-        client.write(ByteBuffer.wrap(header));
-    }
-
-
 }
