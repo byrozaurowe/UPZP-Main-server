@@ -41,17 +41,14 @@ public class Server implements Runnable {
                 while (i.hasNext()) {
                     SelectionKey key = i.next();
                     if (key.isAcceptable()) {
-                        // New client has been accepted
                         handleAccept(socket, key);
                     } else if (key.isReadable()) {
-                        // We can run non-blocking operation READ on our client
                         handleRead(key);
                     }
                     i.remove();
                 }
             } catch (WrongPacketException e) {
                 System.out.println(e.getMessage());
-
                 continue;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -73,7 +70,6 @@ public class Server implements Runnable {
     }
 
     private void handleRead(SelectionKey key) throws WrongPacketException, IOException {
-
         // create a ServerSocketChannel to read the request
         SocketChannel client = (SocketChannel) key.channel();
         byte[] data = new byte[1024];

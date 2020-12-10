@@ -1,9 +1,5 @@
 package mainServer;
 
-import com.google.flatbuffers.FlatBufferBuilder;
-import mainServer.schemas.Tester;
-import mainServer.schemas.Vec3;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -17,17 +13,11 @@ class WrongPacketException extends Exception {
 
 /** Klasa odpowiedzialna za kodowanie i odkodowywanie pakietów */
 public class Header {
-    private byte[] BEGINSEQ = CRC.hexStringToLittleEndianByteArray("ABDA");
-    private static byte res1 = (byte) 00000001;
-    private static byte res = (byte) 00000000;
-    private int payloadLength;
-    private byte version;
-    private boolean isChecksum;
+    private static final byte[] BEGINSEQ = CRC.hexStringToLittleEndianByteArray("ABDA");
+    private static byte res1 = (byte)1;
+    private static byte res = (byte)0;
 
-    private byte[] header;
-    private byte[] data;
-
-    class Return {
+    static class Return {
         byte[] bytes;
         byte version;
 
@@ -41,27 +31,27 @@ public class Header {
      * @param receivedData otrzymane dane
      * @return przesyłany obiekt
      */
-    Return decode(byte[] receivedData) throws WrongPacketException {
+    static Return decode(byte[] receivedData) throws WrongPacketException {
         int packetLength;
         if(!Arrays.equals(BEGINSEQ, subArray(receivedData, 0, 1))) {
             throw new WrongPacketException("Wrong begin sequence");
         }
-        this.version = receivedData[2];
-        this.isChecksum = (receivedData[3] % 2) == 1;
+        byte version = receivedData[2];
+        boolean isChecksum = (receivedData[3] % 2) == 1;
 
         byte[] payloadLengthTab = subArray(receivedData, 4, 7);
-        this.payloadLength = ByteBuffer.wrap(payloadLengthTab).
+        int payloadLength = ByteBuffer.wrap(payloadLengthTab).
                                 order(ByteOrder.LITTLE_ENDIAN).getInt();
         if(isChecksum)
             packetLength = 16 + payloadLength;
         else
             packetLength = 12 + payloadLength;
 
-        if(packetLength - headerLength() != this.payloadLength)
+        if(packetLength - headerLength(isChecksum) != payloadLength)
             throw new WrongPacketException("Wrong payload length");
 
-        header = subArray(receivedData, 0, headerLength()-1);
-        data = subArray(receivedData, headerLength(), packetLength-1);
+        byte[] header = subArray(receivedData, 0, headerLength(isChecksum)-1);
+        byte[] data = subArray(receivedData, headerLength(isChecksum), packetLength-1);
 
         if(isChecksum) {
             byte[] byteArray = CRC.crc32(data);
@@ -71,10 +61,10 @@ public class Header {
         }
 
         byte[] calculatedHeaderChecksum = CRC.crc16(subArray(header,
-                0, headerLength() - 3));
+                0, headerLength(isChecksum) - 3));
 
         if(!Arrays.equals(calculatedHeaderChecksum, subArray(header,
-                14, headerLength() - 1))) {
+                14, headerLength(isChecksum) - 1))) {
             throw new WrongPacketException("Wrong header checksum");
         }
         return new Return(data, version);
@@ -86,14 +76,12 @@ public class Header {
      * @param isChecksum czy będzie w headerze zawarte payload checksum
      * @return zapakowane dane w header w formie tablicy bajtów
      */
-    byte[] encode(byte version, byte[] data, boolean isChecksum) {
-        this.version = version;
-        this.isChecksum = isChecksum;
+    static byte[] encode(byte version, byte[] data, boolean isChecksum) {
         ArrayList<Byte> encoded = new ArrayList<>();
         encoded.add(BEGINSEQ[0]);
         encoded.add(BEGINSEQ[1]);
 
-        encoded.add(this.version);
+        encoded.add(version);
 
         // payload checksum
         if(isChecksum) {
@@ -110,7 +98,7 @@ public class Header {
         encoded.add(res);
         encoded.add(res);
 
-        header = new byte[headerLength()-2];
+        byte[] header = new byte[headerLength(isChecksum)-2];
         for(int i = 0; i < encoded.size(); i++) {
             header[i] = encoded.get(i);
         }
@@ -129,12 +117,7 @@ public class Header {
         return result;
     }
 
-    private int headerLength() {
-        if(isChecksum){
-            return 16;
-        }
-        return 12;
-    }
+    private static int headerLength(boolean isChecksum) { return isChecksum ? 16 : 12; }
 
     private static byte[] intToLittleEndian(int numer, int sizeInByte) {
         ByteBuffer bb = ByteBuffer.allocate(sizeInByte);
@@ -143,13 +126,13 @@ public class Header {
         return bb.array();
     }
 
-    private void addAll(byte[] tab, ArrayList<Byte> list) {
+    private static void addAll(byte[] tab, ArrayList<Byte> list) {
         for (byte b : tab) {
             list.add(b);
         }
     }
 
-    private byte[] subArray(byte[] array, int beg, int end) {
+    private static byte[] subArray(byte[] array, int beg, int end) {
         byte[] subarray = new byte[end - beg + 1];
         if (subarray.length >= 0) System.arraycopy(array, beg + 0, subarray, 0, subarray.length);
         return subarray;

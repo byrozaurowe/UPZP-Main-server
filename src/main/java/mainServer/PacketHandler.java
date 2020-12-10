@@ -10,10 +10,8 @@ public class PacketHandler {
      * @throws WrongPacketException błąd podczas odkodowywania pakietu
      */
     static byte[] handleData(byte[] receivedData, Socket socket) throws WrongPacketException {
-        Header h = new Header();
-        Header.Return returned = h.decode(receivedData);
-        Serialization s = new Serialization();
-        if(s.deserialize(returned.bytes, returned.version, socket)) {
+        Header.Return returned = Header.decode(receivedData);
+        if(Serialization.deserialize(returned.bytes, returned.version, socket)) {
             switch((int) returned.version) {
                 case 1:
                     break;
@@ -30,7 +28,6 @@ public class PacketHandler {
             return null;
         }
         else {
-            byte[] returnMsg;
             switch((int) returned.version) {
                 case 1:
                     return buildError("Błędne login lub hasło");
@@ -40,31 +37,23 @@ public class PacketHandler {
         }
     }
     private static byte[] buildError(String string) {
-        Serialization s = new Serialization();
-        byte[] serialized = s.serialize(string.getBytes(), 1);
-        Header h = new Header();
-        return h.encode((byte)1, serialized, true);
+        byte[] serialized = Serialization.serialize(string.getBytes(), 1);
+        return Header.encode((byte)1, serialized, true);
     }
 
     private static byte[] buildWaitingRoomsList(ArrayList<WaitingRoom> list) {
-        Serialization s = new Serialization();
-        byte[] serialized = s.serialize(list, 7);
-        Header h = new Header();
-        return h.encode((byte)1, serialized, true);
+        byte[] serialized = Serialization.serialize(list, 7);
+        return Header.encode((byte)1, serialized, true);
     }
 
     private static byte[] buildWaitingRoom(WaitingRoom room) {
-        Serialization s = new Serialization();
-        byte[] serialized = s.serialize(room, 8);
-        Header h = new Header();
-        return h.encode((byte)1, serialized, true);
+        byte[] serialized = Serialization.serialize(room, 8);
+        return Header.encode((byte)1, serialized, true);
     }
 
     private static byte[] bulidTestData(String string) {
-        Serialization s = new Serialization();
-        byte[] serialized = s.serialize(string.getBytes(), 1);
-        Header h = new Header();
-        return h.encode((byte)1, serialized, true);
+        byte[] serialized = Serialization.serialize(string.getBytes(), 1);
+        return Header.encode((byte)1, serialized, true);
     }
 
 }

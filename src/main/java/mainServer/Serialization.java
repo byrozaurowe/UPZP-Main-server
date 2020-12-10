@@ -12,12 +12,16 @@ import mainServer.schemas.Vec3;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class Serialization {
 
-     boolean deserialize(byte[] data, byte version, Socket s) {
+    /** Funkcja przeprowadzająca deserializacje danych
+     * @param data
+     * @param version wersja schematu do użycia
+     * @param s
+     * @return
+     */
+     static boolean deserialize(byte[] data, byte version, Socket s) {
         switch((int) version) {
             case 1:
                 //deserializeTestData(data);
@@ -29,23 +33,28 @@ public class Serialization {
         return false;
     }
 
-    byte[] serialize(Object data, int version) {
+    /** Funkcja przeprowadzająca serializację obiektów
+     * @param data
+     * @param version
+     * @return
+     */
+    static byte[] serialize(Object data, int version) {
         switch(version) {
             case 1:
                 return serializeError(data);
             case 2:
                 break;
             case 7:
-                serializeWaitingRoomsList(data);
+                return serializeWaitingRoomsList(data);
             case 8:
-                serializeWaitingRoom(data);
+                return serializeWaitingRoom(data);
             default:
                 return serializeTestData();
         }
         return null;
     }
 
-    private boolean deserializeLoggingClient(byte[] data, Socket socket) {
+    private static boolean deserializeLoggingClient(byte[] data, Socket socket) {
         try {
             FLoggingClient client =
                     FLoggingClient.getRootAsFLoggingClient(ByteBuffer.wrap(data));
@@ -59,7 +68,7 @@ public class Serialization {
         }
     }
 
-    private byte[] serializeError(Object msg) {
+    private static byte[] serializeError(Object msg) {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         int message = builder.createString(msg.toString());
         FError.startFError(builder);
@@ -69,19 +78,27 @@ public class Serialization {
         return builder.sizedByteArray();
     }
 
-    private byte[] serializeWaitingRoomsList(Object list) {
-         FlatBufferBuilder builder = new FlatBufferBuilder(0);
+    private static byte[] serializeWaitingRoomsList(Object list) {
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
         FWaitingRoomsList.startFWaitingRoomsList(builder);
         for (WaitingRoom room : (ArrayList<WaitingRoom>)list) {
             int city = builder.createString(room.getCity());
-            FWaitingRoomsList.addWaitingRoom(builder, FWaitingRoom.createFWaitingRoom(builder, room.getId(), city, room.getHost(), room.getClientsLoggedVal(), room.getClientsMax(), room.getStatus()));
+            FWaitingRoomsList.addWaitingRoom(builder,
+                    FWaitingRoom.createFWaitingRoom(
+                            builder,
+                            room.getId(),
+                            city,
+                            room.getHost(),
+                            room.getClientsLoggedVal(),
+                            room.getClientsMax(),
+                            room.getStatus()));
         }
         int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
         builder.finish(readyList);
         return builder.sizedByteArray();
     }
 
-    private byte[] serializeWaitingRoom(Object data) {
+    private static byte[] serializeWaitingRoom(Object data) {
          /* zaczęłam i nie skończyłam
 
          WaitingRoom room = (WaitingRoom)data;
@@ -93,11 +110,11 @@ public class Serialization {
         mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, )
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder,
                 mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, ));
-    */
+        */
         return null;
     }
 
-    private byte[] serializeTestData() {
+    private static byte[] serializeTestData() {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         int someString = builder.createString("qwer");
         Tester.startTester(builder);
@@ -107,13 +124,11 @@ public class Serialization {
         int test = Tester.endTester(builder);
         builder.finish(test);
         byte[] buf = builder.sizedByteArray();
-        Header h = new Header();
-        return h.encode((byte)1, buf, true);
+        return Header.encode((byte)1, buf, true);
     }
 
-    void deserializeTestData(byte[] data) {
+    private static void deserializeTestData(byte[] data) {
         Tester tester = Tester.getRootAsTester(ByteBuffer.wrap(data));
-
         int some_integer = tester.someInteger();
         String some_string = tester.someString();
         Vec3 pos = tester.pos();
