@@ -80,25 +80,25 @@ public class Serialization {
 
     private static byte[] serializeWaitingRoomsList(Object list) {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        FWaitingRoomsList.startFWaitingRoomsList(builder);
+        ArrayList<Integer> tab = new ArrayList<Integer>();
         for (WaitingRoom room : (ArrayList<WaitingRoom>) list) {
             int city = builder.createString(room.getCity());
-            //TODO Poprawa serializacji, nie można robić zagnieżdżonej serializacji
-            FWaitingRoomsList.addWaitingRoom(builder,
-                    FWaitingRoom.createFWaitingRoom(
-                            builder,
-                            room.getId(),
-                            city,
-                            room.getHost(),
-                            room.getClientsLoggedVal(),
-                            room.getClientsMax(),
-                            room.getStatus()));
-
-            int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
-            builder.finish(readyList);
-            return builder.sizedByteArray();
+            int serializedRoom = FWaitingRoom.createFWaitingRoom(builder,
+                    room.getId(),
+                    city,
+                    room.getHost(),
+                    room.getClientsLoggedVal(),
+                    room.getClientsMax(),
+                    room.getStatus());
+            tab.add(serializedRoom);
         }
-        return null;
+        FWaitingRoomsList.startFWaitingRoomsList(builder);
+        for (int serializedRoom: tab) {
+            FWaitingRoomsList.addWaitingRoom(builder, serializedRoom);
+        }
+        int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
+        builder.finish(readyList);
+        return builder.sizedByteArray();
     }
 
     private static byte[] serializeWaitingRoom(Object data) {
