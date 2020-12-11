@@ -19,8 +19,7 @@ public class PacketHandler {
                     //klient chce się zalogować
                     //tutaj trzeba rozpakować jego dane i sprawdzić czy istnieje taki zestaw w bazie
                     //zakładam że może się zalogowac i odsyłam listę waiting roomów
-                    byte[] bytes = buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
-                    return Header.encode((byte)7, bytes, true);
+                    return buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
                 case 6:
                     // roomId trzeba odczytać z wiadomości która przyszła, tymczasowo ustawione 1
                     int roomId = 1;
@@ -44,12 +43,12 @@ public class PacketHandler {
 
     private static byte[] buildWaitingRoomsList(ArrayList<WaitingRoom> list) {
         byte[] serialized = Serialization.serialize(list, 7);
-        return Header.encode((byte)1, serialized, true);
+        return Header.encode((byte)7, serialized, true);
     }
 
     private static byte[] buildWaitingRoom(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 8);
-        return Header.encode((byte)1, serialized, true);
+        return Header.encode((byte)8, serialized, true);
     }
 
     private static byte[] bulidTestData(String string) {

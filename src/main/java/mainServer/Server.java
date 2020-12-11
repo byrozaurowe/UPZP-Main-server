@@ -18,6 +18,7 @@ public class Server implements Runnable {
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
         waitingRoomsCoordinator = new WaitingRoomsCoordinator();
+        DatabaseHandler.getInstance();
         ServerSocketChannel socket;
         try {
             selector = Selector.open();
@@ -64,7 +65,10 @@ public class Server implements Runnable {
     }
 
     void test() throws UnknownHostException {
-        waitingRoomsCoordinator.addWaitingRoom(new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket())));
+        WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()));
+        w.setClientsMax(20);
+        w.setId(1);
+        waitingRoomsCoordinator.addWaitingRoom(w);
     }
     private void handleAccept(ServerSocketChannel mySocket, SelectionKey key) throws IOException {
         System.out.println("Connection Accepted...");

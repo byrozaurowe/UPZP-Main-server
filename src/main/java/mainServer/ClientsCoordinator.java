@@ -5,6 +5,7 @@ import mainServer.logging.LoginHandler;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ClientsCoordinator {
@@ -32,7 +33,7 @@ public class ClientsCoordinator {
         loggingClients.remove(loggingClient);
     }
 
-    public boolean verifyLoggingClient(Socket s, String name, String pass) {
+    public boolean verifyLoggingClient(Socket s, String name, String pass) throws SQLException, IOException {
         LoggingClient client = findLogClientBySocket(s);
         client.setName(name);
         client.setPassword(pass);
@@ -89,6 +90,19 @@ public class ClientsCoordinator {
             System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
             clients.remove(client);
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void disconnectLoggClient(LoggingClient loggingClient) {
+        try {
+            LoggingClient client = findLogClientBySocket(loggingClient.getSocket());
+            System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
+            client.getSocket().close();
+            loggingClients.remove(client);
+        } catch (NullPointerException | IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

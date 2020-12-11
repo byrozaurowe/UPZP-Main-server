@@ -8,6 +8,19 @@ public class WaitingRoom {
     private String city;
     private Chat chat;
     private Client host;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setClientsMax(int clientsMax) {
+        this.clientsMax = clientsMax;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     private int clientsMax;
     private boolean status;
 
@@ -50,7 +63,7 @@ public class WaitingRoom {
         else return false;
     }
 
-    public WaitingRoom (String city, Client host) {
+    public WaitingRoom(String city, Client host) {
         this.city = city;
         this.host = host;
 
