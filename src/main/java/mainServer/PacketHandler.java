@@ -19,7 +19,8 @@ public class PacketHandler {
                     //klient chce się zalogować
                     //tutaj trzeba rozpakować jego dane i sprawdzić czy istnieje taki zestaw w bazie
                     //zakładam że może się zalogowac i odsyłam listę waiting roomów
-                    return buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
+                    byte[] bytes = buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
+                    return Header.encode((byte)7, bytes, true);
                 case 6:
                     // roomId trzeba odczytać z wiadomości która przyszła, tymczasowo ustawione 1
                     int roomId = 1;

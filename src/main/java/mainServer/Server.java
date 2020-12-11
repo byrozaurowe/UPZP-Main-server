@@ -4,8 +4,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import mainServer.schemas.*;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
+import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Arrays;
@@ -33,6 +32,11 @@ public class Server implements Runnable {
             ioException.printStackTrace();
             return;
         }
+        try {
+            test();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         while (true) {
             try {
                 selector.select();
@@ -59,6 +63,9 @@ public class Server implements Runnable {
         }
     }
 
+    void test() throws UnknownHostException {
+        waitingRoomsCoordinator.addWaitingRoom(new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket())));
+    }
     private void handleAccept(ServerSocketChannel mySocket, SelectionKey key) throws IOException {
         System.out.println("Connection Accepted...");
         // Accept the connection and set non-blocking mode
@@ -78,9 +85,9 @@ public class Server implements Runnable {
         byte[] a = new byte[1024];
         Arrays.fill(a,(byte)0);
         if(Arrays.equals(a, data)) {
-            //clientsCoordinator.disconnect(client.socket());
-            System.out.println("Rozłączono klienta " + client.socket().getInetAddress());
-            client.socket().close();
+            clientsCoordinator.disconnect(client.socket());
+            //System.out.println("Rozłączono klienta " + client.socket().getInetAddress());
+            //client.socket().close();
         }
         else {
             System.out.println("Reading...");

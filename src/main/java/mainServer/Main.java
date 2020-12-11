@@ -1,5 +1,9 @@
 package mainServer;
 
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 public class Main {
     public static Server server;
 

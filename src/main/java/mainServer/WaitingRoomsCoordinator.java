@@ -1,7 +1,11 @@
 package mainServer;
 
 import javax.lang.model.type.NullType;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class WaitingRoomsCoordinator {
 
