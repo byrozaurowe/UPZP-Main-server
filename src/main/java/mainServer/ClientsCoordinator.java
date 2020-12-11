@@ -91,7 +91,7 @@ public class ClientsCoordinator {
             client.getSocket().close();
             clients.remove(client);
         } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Disconnect Client error " + e.getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ public class ClientsCoordinator {
             client.getSocket().close();
             loggingClients.remove(client);
         } catch (NullPointerException | IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Disconnect loggClient error " + e.getMessage());
         }
     }
 }

@@ -20,7 +20,7 @@ public class LoginHandler {
         }
         else {
             System.out.println("Błędne logowanie");
-            Main.server.clientsCoordinator.disconnectLoggClient(logClient);
+            //Main.server.clientsCoordinator.disconnectLoggClient(logClient);
             return false;
         }
     }

@@ -63,7 +63,7 @@ public class Serialization {
             return Main.server.clientsCoordinator.verifyLoggingClient(
                     socket, name, pass);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Deserialize loggingClient " + e.getMessage());
             return false;
         }
     }

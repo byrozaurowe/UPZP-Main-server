@@ -56,10 +56,6 @@ public class DatabaseHandler {
         //String account_login_1 = "zxcv";
         //String account_pass_1 = "123456";
 
-        //non exist
-        //String account_login_2 = "asdf";
-        //String account_pass_2 = "654321";
-
         String query_loggin = "SELECT count(id) FROM user_details WHERE login='" + login + "'AND password=md5('" + haslo +  "')";
         ResultSet rs = stmt.executeQuery(query_loggin);
         rs.next();
