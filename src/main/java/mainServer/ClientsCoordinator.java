@@ -5,12 +5,16 @@ import mainServer.logging.LoginHandler;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Klasa zarządzająca klientami podpiętymi pod serwer główny */
 public class ClientsCoordinator {
 
+    /** Lista zalogowanych klientów */
     private ArrayList<Client> clients;
+    /** Lista klientów oczekujących na weryfikacje danych */
     private ArrayList<LoggingClient> loggingClients;
 
     ClientsCoordinator() {
@@ -18,21 +22,31 @@ public class ClientsCoordinator {
         loggingClients = new ArrayList<>();
     }
 
-    public void sendTo(String name, String packetType) {
-        Client client = findClientByName(name);
+    /** Funkcja wysyłająca pakiet do klienta
+     * @param s socket klienta, do którego chcemy wysłać pakiet
+     * @param toSend pakiet do wysłania
+     */
+    public void sendTo(Socket s, byte[] toSend) throws IOException {
+        s.getChannel().write(ByteBuffer.wrap(toSend));
     }
 
-    public void sendTo(Socket s, String packetType, Object o) {
-        if(s.isClosed())
-            return;
-
-    }
-
-    public void addClient(Client client, LoggingClient loggingClient) {
+    /** Dodaje klenta po zweryfikowaniu danych
+     * @param loggingClient klient, którego zweryfikowano
+     */
+    public void addClient(LoggingClient loggingClient) {
+        Client client = new Client(loggingClient.getName(),
+                                   loggingClient.getIpAddress(),
+                                   loggingClient.getSocket());
         clients.add(client);
         loggingClients.remove(loggingClient);
     }
 
+    /** Uzupełnia dane loggingClienta
+     * @param s socket logującego się klienta
+     * @param name nazwa logującego się klienta
+     * @param pass hasło logującego się klienta
+     * @return czy poprawnie zweryfikowano hasło i login w bazie?
+     */
     public boolean verifyLoggingClient(Socket s, String name, String pass) throws SQLException, IOException {
         LoggingClient client = findLogClientBySocket(s);
         client.setName(name);
@@ -40,11 +54,12 @@ public class ClientsCoordinator {
         return LoginHandler.verifyIdentity(client);
     }
 
-    public boolean connect(Socket s) {
+    /** Podłącza próbującego się połączyć, niezweryfikowanego klienta
+     * @param s socket, próbującego się połączyć klienta
+     */
+    public void connect(Socket s) {
         loggingClients.add(new LoggingClient(s));
         System.out.println("Połączono do " + s);
-
-        return true;
     }
 
     Client findClientByName(String name) {
@@ -81,9 +96,14 @@ public class ClientsCoordinator {
 
             client.getSocket().close();
             clients.remove(client);
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.println("Disconnect Client error " + e.getMessage());
+        }
     }
 
+    /** Metoda rozłączająca klienta
+     * @param s socket klienta, którego chcemy rozłączyć
+     */
     public void disconnect(Socket s) throws IOException {
         try {
             Client client = findClientBySocket(s);
@@ -95,6 +115,9 @@ public class ClientsCoordinator {
         }
     }
 
+    /** Metoda rozłączająca klienta, który chce się zalogować
+     * @param loggingClient klient, który chce się zalogować
+     */
     public void disconnectLoggClient(LoggingClient loggingClient) {
         try {
             LoggingClient client = findLogClientBySocket(loggingClient.getSocket());

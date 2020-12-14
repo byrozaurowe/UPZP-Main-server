@@ -1,8 +1,5 @@
 package mainServer;
 
-import com.google.flatbuffers.FlatBufferBuilder;
-import mainServer.schemas.*;
-
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -11,6 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
+/** Klasa główna serwera */
 public class Server implements Runnable {
     private static Selector selector = null;
     public ClientsCoordinator clientsCoordinator;
@@ -54,7 +52,6 @@ public class Server implements Runnable {
                 }
             } catch (WrongPacketException e) {
                 System.out.println(e.getMessage());
-                continue;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -70,6 +67,8 @@ public class Server implements Runnable {
         w.setId(1);
         waitingRoomsCoordinator.addWaitingRoom(w);
     }
+
+    /** Obsługa próby podłączenia klienta pod serwer */
     private void handleAccept(ServerSocketChannel mySocket, SelectionKey key) throws IOException {
         System.out.println("Connection Accepted...");
         // Accept the connection and set non-blocking mode
@@ -80,6 +79,7 @@ public class Server implements Runnable {
         client.register(selector, SelectionKey.OP_READ);
     }
 
+    /** Obsługa wiadomości otrzymanej od klienta */
     private void handleRead(SelectionKey key) throws WrongPacketException, IOException {
         // create a ServerSocketChannel to read the request
         SocketChannel client = (SocketChannel) key.channel();
@@ -87,7 +87,7 @@ public class Server implements Runnable {
 
         client.read(ByteBuffer.wrap(data));
         byte[] a = new byte[1024];
-        Arrays.fill(a,(byte)0);
+        Arrays.fill(a, (byte)0);
         if(Arrays.equals(a, data)) {
             clientsCoordinator.disconnect(client.socket());
             //System.out.println("Rozłączono klienta " + client.socket().getInetAddress());
@@ -95,8 +95,7 @@ public class Server implements Runnable {
         }
         else {
             System.out.println("Reading...");
-            byte[] packet = PacketHandler.handleData(data, client.socket()); // powinno zwrócic odpowiedź
-            client.write(ByteBuffer.wrap(packet));
+            PacketHandler.handleData(data, client);
         }
     }
 }

@@ -2,6 +2,7 @@ package mainServer;
 
 import java.util.zip.CRC32;
 
+/** Klasa zajmująca się CRC16 i CRC32 */
 public class CRC {
     /** Konwertuje hexString do tablicy bajtów little endian
      * @param hexString string w formie szesnastkowej

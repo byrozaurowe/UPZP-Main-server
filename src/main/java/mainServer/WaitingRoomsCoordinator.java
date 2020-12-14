@@ -1,18 +1,13 @@
 package mainServer;
 
-import javax.lang.model.type.NullType;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WaitingRoomsCoordinator {
 
     private ArrayList<WaitingRoom> waitingRooms;
 
     public WaitingRoomsCoordinator() {
-        waitingRooms = new ArrayList<WaitingRoom>();
+        waitingRooms = new ArrayList<>();
     }
 
     public void addWaitingRoom(WaitingRoom waitingRoom) {

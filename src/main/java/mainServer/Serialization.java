@@ -13,12 +13,13 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+/** Klasa zajmująca się serializacją i deserializacją obiektów z pakietów */
 public class Serialization {
 
     /** Funkcja przeprowadzająca deserializacje danych
-     * @param data
+     * @param data dane do deserializacji
      * @param version wersja schematu do użycia
-     * @param s
+     * @param s socket
      * @return
      */
      static boolean deserialize(byte[] data, byte version, Socket s) {
@@ -34,8 +35,8 @@ public class Serialization {
     }
 
     /** Funkcja przeprowadzająca serializację obiektów
-     * @param data
-     * @param version
+     * @param data dane do serializacji
+     * @param version wersja schematu do użycia
      * @return
      */
     static byte[] serialize(Object data, int version) {
@@ -80,7 +81,7 @@ public class Serialization {
 
     private static byte[] serializeWaitingRoomsList(Object list) {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        ArrayList<Integer> tab = new ArrayList<Integer>();
+        ArrayList<Integer> tab = new ArrayList<>();
         for (WaitingRoom room : (ArrayList<WaitingRoom>) list) {
             int city = builder.createString(room.getCity());
             int serializedRoom = FWaitingRoom.createFWaitingRoom(builder,
