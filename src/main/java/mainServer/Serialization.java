@@ -23,18 +23,20 @@ public class Serialization {
      * @param s socket
      * @return
      */
-     static byte[] deserialize(byte[] data, int version, Socket s) {
-        switch((int) version) {
+     static Object deserialize(byte[] data, int version, Socket s) {
+        switch(version) {
             case 1:
                 //deserializeTestData(data);
             case 2:
-               // return deserializeLoggingClient(data, s);
+                return deserializeLoggingClient(data, s);
+            case 5:
+                return deserializeNewWaitingRoom(data, s);
             case 6:
                 return deserializeChooseWaitingRoom(data);
             default:
                 deserializeTestData(data);
         }
-        return false;
+        return null;
     }
 
     /** Funkcja przeprowadzająca serializację obiektów
@@ -106,11 +108,9 @@ public class Serialization {
     }
 
     private static byte[] serializeWaitingRoom(Object data) {
-         /* zaczęłam i nie skończyłam
-
-         WaitingRoom room = (WaitingRoom)data;
-         FlatBufferBuilder builder = new FlatBufferBuilder(0);
-         mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
+        WaitingRoom room = (WaitingRoom)data;
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
         mainServer.schemas.FWaitingRoom.FWaitingRoom.startTeamsVector(builder, 2);
         int[] teams = FTeam.
@@ -150,10 +150,18 @@ public class Serialization {
         System.out.println("x: " + x + "y: " + y + "z: " + z);
     }
 
-    private static byte[] deserializeChooseWaitingRoom(byte[] data) {
+    private static Object deserializeChooseWaitingRoom(byte[] data) {
         FChooseWaitingRoom chooseWaitingRoom = FChooseWaitingRoom.getRootAsFChooseWaitingRoom(ByteBuffer.wrap(data));
         int roomId = chooseWaitingRoom.id();
-        byte[] bytes = serializeWaitingRoom(Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId));
-        return bytes;
+        return Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId);
     }
+
+    private static Object deserializeNewWaitingRoom(byte[] data, Socket s) {
+        FNewWaitingRoom newWaitingRoom = FNewWaitingRoom.getRootAsFNewWaitingRoom(ByteBuffer.wrap(data));
+        String city = newWaitingRoom.city();
+        int clientsMax = newWaitingRoom.clientsMax();
+        Client host = Main.server.clientsCoordinator.findClientBySocket(s);
+        return new WaitingRoom(city, host, clientsMax);
+    }
+
 }

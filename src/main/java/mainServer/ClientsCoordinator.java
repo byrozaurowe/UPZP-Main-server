@@ -17,6 +17,7 @@ public class ClientsCoordinator {
     /** Lista klientów oczekujących na weryfikacje danych */
     private ArrayList<LoggingClient> loggingClients;
 
+    /** Konstrukor koordynatora klientów */
     ClientsCoordinator() {
         clients = new ArrayList<>();
         loggingClients = new ArrayList<>();
@@ -30,6 +31,15 @@ public class ClientsCoordinator {
         s.getChannel().write(ByteBuffer.wrap(toSend));
     }
 
+    /** Funkcja wysyłająca pakiety do klientów na liście */
+    public void sendToAllWaitingRoomList() throws IOException {
+        byte[] toSend = PacketHandler.buildWaitingRoomsList();
+        for(Client c : clients) {
+            if(c.getClientStatus() == ClientStatus.WAITING_ROOM_LIST)
+                c.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
+        }
+    }
+
     /** Dodaje klenta po zweryfikowaniu danych
      * @param loggingClient klient, którego zweryfikowano
      */
@@ -37,6 +47,13 @@ public class ClientsCoordinator {
         Client client = new Client(loggingClient.getName(),
                                    loggingClient.getIpAddress(),
                                    loggingClient.getSocket());
+        // przydzielanie ip, bedzie do zmiany bo baza musi nam wyslac
+        if(clients.isEmpty()) {
+            client.setId(1);
+        }
+        else {
+            client.setId(clients.get(clients.size()-1).getId() + 1);
+        }
         clients.add(client);
         loggingClients.remove(loggingClient);
     }
@@ -80,7 +97,7 @@ public class ClientsCoordinator {
         return null;
     }
 
-    private Client findClientBySocket(Socket s) {
+    public Client findClientBySocket(Socket s) {
         for(Client client: clients) {
             if(client.getSocket() == s) {
                 return client;

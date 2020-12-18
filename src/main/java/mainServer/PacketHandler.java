@@ -14,8 +14,9 @@ public class PacketHandler {
      */
     static void handleData(byte[] receivedData, SocketChannel client) throws WrongPacketException, IOException {
         Header.Return returned = Header.decode(receivedData);
+        Object o = Serialization.deserialize(returned.bytes, returned.version, client.socket());
         byte[] toSend = new byte[0];
-        if(Serialization.deserialize(returned.bytes, returned.version, client.socket())) {
+        if(o != null) {
             switch((int) returned.version) {
                 case 1:
                     break;
@@ -25,17 +26,19 @@ public class PacketHandler {
                     //zakładam że może się zalogowac i odsyłam listę waiting roomów
                     toSend = buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
                     break;
+                case 5:
+                    WaitingRoom room = (WaitingRoom) o;
+                    Main.server.waitingRoomsCoordinator.addWaitingRoom(room);
+                    toSend = buildWaitingRoom(room);
+                    break;
                 case 6:
-                    // roomId trzeba odczytać z wiadomości która przyszła, tymczasowo ustawione 1
-                    int roomId = 1;
-                    toSend = buildWaitingRoom(Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId));
+                    WaitingRoom wr = (WaitingRoom) o;
+                    toSend = buildWaitingRoom(wr);
+                    wr.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
                     break;
             }
-            client.write(ByteBuffer.wrap(toSend));
         }
-        else {
-            toSend = buildError("Błąd");
-        }
+        client.write(ByteBuffer.wrap(toSend));
     }
 
     /** Buduje pakiet błędu
@@ -47,7 +50,8 @@ public class PacketHandler {
         return Header.encode((byte)1, serialized, true);
     }
 
-    private static byte[] buildWaitingRoomsList(ArrayList<WaitingRoom> list) {
+    public static byte[] buildWaitingRoomsList() {
+        ArrayList<WaitingRoom> list = Main.server.waitingRoomsCoordinator.getWaitingRooms();
         byte[] serialized = Serialization.serialize(list, 7);
         return Header.encode((byte)7, serialized, true);
     }

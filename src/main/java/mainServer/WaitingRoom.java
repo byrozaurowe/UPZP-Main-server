@@ -38,7 +38,7 @@ public class WaitingRoom {
     public boolean joinTeam(Client client) {
         if (team1.clientsSize() <= team2.clientsSize()) {
             if (team1.joinTeam(client)) return true;
-            else return  team2.joinTeam(client);
+            else return team2.joinTeam(client);
         }
         else {
             if (team2.joinTeam(client)) return true;
@@ -47,12 +47,12 @@ public class WaitingRoom {
     }
 
     public boolean canStart() {
-        if (team1.clientsSize() >= 10 && team2.clientsSize() >= 10)
-            return true;
-        else return false;
+        return team1.clientsSize() >= 10 && team2.clientsSize() >= 10;
     }
 
-    public boolean isHost(Client client) {if (client == host) return true; else return false;};
+    public boolean isHost(Client client) {
+        return client == host;
+    }
 
     public boolean changeHost() {
         if (team1.clientsSize() > 0) {

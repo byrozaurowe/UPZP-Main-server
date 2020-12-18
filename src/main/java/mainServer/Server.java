@@ -33,7 +33,7 @@ public class Server implements Runnable {
         }
         try {
             test();
-        } catch (UnknownHostException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         while (true) {
@@ -61,10 +61,9 @@ public class Server implements Runnable {
         }
     }
 
-    void test() throws UnknownHostException {
-        WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()));
-        w.setClientsMax(20);
-        waitingRoomsCoordinator.addWaitingRoom(w, 1);
+    void test() throws IOException {
+        WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()), 20);
+        waitingRoomsCoordinator.addWaitingRoom(w);
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */
