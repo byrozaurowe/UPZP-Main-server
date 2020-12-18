@@ -1,17 +1,22 @@
 package mainServer;
 
+
+
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class DatabaseHandler {
 
     // JDBC URL, username and password of MySQL server
-    private static final String url = "jdbc:mysql://sql2.freemysqlhosting.net:3306/sql2381159";
-    private static final String user = "sql2381159";
-    private static final String password = "wI7*hQ2%";
+    private static final String url = "jdbc:mysql://34.107.65.104:3306/pz";
+    private static final String user = "backend";
+    private static final String password = "backendpz2020";
 
     private static DatabaseHandler DATABASE_HANDLER;
 
@@ -25,8 +30,24 @@ public class DatabaseHandler {
     private DatabaseHandler() {
         if(DATABASE_HANDLER == null) {
             try {
-                // opening database connection to MySQL server
-                con = DriverManager.getConnection(url, user, password);
+                Properties props = new Properties();
+                // opening database connection to MySQL server*/
+                props.clear();
+                props.setProperty("user", user);
+                props.setProperty("password", password);
+                props.setProperty("useSSL", "true");
+                props.setProperty("requireSSL", "true");
+                props.setProperty("verifyServerCertificate", "true");
+
+                System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+                System.setProperty("javax.net.ssl.trustStore", "src\\main\\resources\\truststore.jks");
+                //System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+
+                System.setProperty("javax.net.ssl.keyStoreType", "JKS");
+                System.setProperty("javax.net.ssl.keyStore", "src\\main\\resources\\keystore.jks");
+                System.setProperty("javax.net.ssl.keyStorePassword", "password");
+
+                con = DriverManager.getConnection(url, props);
                 // getting Statement object to execute query
                 stmt = con.createStatement();
             } catch (SQLException sqlEx) {
@@ -55,7 +76,7 @@ public class DatabaseHandler {
         //String account_login_1 = "zxcv";
         //String account_pass_1 = "123456";
 
-        String query_loggin = "SELECT count(id) FROM user_details WHERE login='" + login + "'AND password=md5('" + haslo +  "')";
+        String query_loggin = "SELECT count(id) FROM user_details WHERE login='" + login + "'AND password='" + haslo + "'";
         ResultSet rs = stmt.executeQuery(query_loggin);
         rs.next();
         return rs.getObject(1);

@@ -64,8 +64,7 @@ public class Server implements Runnable {
     void test() throws UnknownHostException {
         WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()));
         w.setClientsMax(20);
-        w.setId(1);
-        waitingRoomsCoordinator.addWaitingRoom(w);
+        waitingRoomsCoordinator.addWaitingRoom(w, 1);
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */

@@ -1,5 +1,8 @@
 package mainServer;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
 public class WaitingRoom {
 
     private int id;
@@ -61,6 +64,18 @@ public class WaitingRoom {
             return true;
         }
         else return false;
+    }
+
+    /** Wysyła wiadomość to wszystkich w tym waiting roomie
+     * @param toSend wiadomość do wysłania
+     */
+    public void sendToPlayersInRoom(byte[] toSend) throws IOException {
+        for(Client c : team1.clients) {
+            c.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
+        }
+        for(Client c : team2.clients) {
+            c.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
+        }
     }
 
     public WaitingRoom(String city, Client host) {
