@@ -16,7 +16,7 @@ public class Server implements Runnable {
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
         waitingRoomsCoordinator = new WaitingRoomsCoordinator();
-        DatabaseHandler.getInstance();
+        //DatabaseHandler.getInstance();
         ServerSocketChannel socket;
         try {
             selector = Selector.open();
@@ -64,6 +64,8 @@ public class Server implements Runnable {
     void test() throws IOException {
         WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()), 20);
         waitingRoomsCoordinator.addWaitingRoom(w);
+        WaitingRoom wr = new WaitingRoom("Wrochrław", new Client("Worjtek", InetAddress.getByName("127.0.1.1"), new Socket()), 20);
+        waitingRoomsCoordinator.addWaitingRoom(wr);
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */
