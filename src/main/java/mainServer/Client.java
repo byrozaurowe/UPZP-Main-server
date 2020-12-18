@@ -17,6 +17,7 @@ public class Client {
     }
 
     public int getId() { return id; }
+    public Vehicle getVehicle() { return vehicle; }
 
     private String name;
     private InetAddress ipAddress;

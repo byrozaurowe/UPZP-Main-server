@@ -106,6 +106,15 @@ public class ClientsCoordinator {
         return null;
     }
 
+    public Client findClientById(int id) {
+        for (Client client : clients) {
+            if (client.getId() == id) {
+                return client;
+            }
+        }
+        return null;
+    }
+
     public void disconnect(String name) throws IOException {
         try {
             Client client = findClientByName(name);

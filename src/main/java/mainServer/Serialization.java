@@ -4,7 +4,11 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import mainServer.schemas.FChooseWaitingRoom.FChooseWaitingRoom;
 import mainServer.schemas.FError.FError;
 import mainServer.schemas.FGame.FTeam;
+import mainServer.schemas.FGame.FVehicle;
 import mainServer.schemas.FLoggingClient.FLoggingClient;
+import mainServer.schemas.FNewWaitingRoom.FNewWaitingRoom;
+import mainServer.schemas.FWaitingRoom.FClient;
+import mainServer.schemas.FWaitingRoom.FVehicleType;
 import mainServer.schemas.FWaitingRoomsList.FWaitingRoom;
 import mainServer.schemas.FWaitingRoomsList.FWaitingRoomsList;
 import mainServer.schemas.Tester;
@@ -123,13 +127,56 @@ public class Serialization {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.startTeamsVector(builder, 2);
-        int[] teams = FTeam.
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, )
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder,
-                mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, ));
-        */
-        return null;
+        int[] serializedTeam = new int[2];
+        ArrayList<Integer> serializedClientTab = new ArrayList<>();
+        for (Client client : room.getClients(1)) {
+            byte vehicleType = 0;
+            switch (client.getVehicle().getVehicleType()) {
+                case Car: vehicleType = FVehicleType.Car;
+                    break;
+                case Cyclist: vehicleType = FVehicleType.Cyclist;
+                    break;
+                case Pedestrian:vehicleType = FVehicleType.Pedestrian;
+            }
+            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
+            int serializedName = builder.createString(client.getName());
+            int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
+            serializedClientTab.add(serializedClient);
+        }
+        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
+        for (int client : serializedClientTab) {
+            mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, client);
+        }
+        serializedTeam[0] = FTeam.endFTeam(builder);
+        serializedClientTab = new ArrayList<>();
+        for (Client client : room.getClients(2)) {
+            byte vehicleType = 0;
+            switch (client.getVehicle().getVehicleType()) {
+                case Car: vehicleType = FVehicleType.Car;
+                    break;
+                case Cyclist: vehicleType = FVehicleType.Cyclist;
+                    break;
+                case Pedestrian:vehicleType = FVehicleType.Pedestrian;
+            }
+            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
+            int serializedName = builder.createString(client.getName());
+            int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
+            serializedClientTab.add(serializedClient);
+        }
+        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
+        for (int client : serializedClientTab) {
+            mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, client);
+        }
+        serializedTeam[1] = FTeam.endFTeam(builder);
+        int serializedTeamsVector = mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, serializedTeam);
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
+        int serializedCity = builder.createString(room.getCity());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addCity(builder, serializedCity);
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax());
+        int serializedRoom = mainServer.schemas.FWaitingRoom.FWaitingRoom.endFWaitingRoom(builder);
+        builder.finish((serializedRoom));
+        return builder.sizedByteArray();
     }
 
     private static byte[] serializeTestData() {

@@ -13,4 +13,7 @@ public class Vehicle {
         this.velocity = velocity;
         this.free = true;
     }
+
+    public int getVelocity() { return velocity; }
+    public VehicleType getVehicleType() { return type; }
 }

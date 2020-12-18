@@ -52,4 +52,6 @@ public class Team {
     Client getFirstClient() {
         return clients.get(1);
     }
+
+    ArrayList<Client> getClients() { return clients; }
 }

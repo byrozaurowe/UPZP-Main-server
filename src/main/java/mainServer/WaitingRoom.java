@@ -2,6 +2,7 @@ package mainServer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class WaitingRoom {
 
@@ -34,6 +35,16 @@ public class WaitingRoom {
     public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
     public int getClientsMax() { return clientsMax; }
     public boolean getStatus() { return status; }
+
+    public ArrayList<Client> getClients(int team) {
+        if (team == 1) {
+            return team1.getClients();
+        }
+        if (team == 2) {
+            return team2.getClients();
+        }
+        return null;
+    }
 
     public boolean joinTeam(Client client) {
         if (team1.clientsSize() <= team2.clientsSize()) {
@@ -78,9 +89,10 @@ public class WaitingRoom {
         }
     }
 
-    public WaitingRoom(String city, Client host) {
+    public WaitingRoom(String city, Client host, int clientsMax) {
         this.city = city;
         this.host = host;
+        this.clientsMax = clientsMax;
 
         team1 = new Team();
         team2 = new Team();

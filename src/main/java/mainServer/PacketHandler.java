@@ -21,10 +21,7 @@ public class PacketHandler {
                 case 1:
                     break;
                 case 2:
-                    //klient chce się zalogować
-                    //tutaj trzeba rozpakować jego dane i sprawdzić czy istnieje taki zestaw w bazie
-                    //zakładam że może się zalogowac i odsyłam listę waiting roomów
-                    toSend = buildWaitingRoomsList(Main.server.waitingRoomsCoordinator.getWaitingRooms());
+                    toSend = buildWaitingRoomsList();
                     break;
                 case 5:
                     WaitingRoom room = (WaitingRoom) o;
