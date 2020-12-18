@@ -13,6 +13,7 @@ import mainServer.schemas.Vec3;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Klasa zajmująca się serializacją i deserializacją obiektów z pakietów */
 public class Serialization {
@@ -98,12 +99,22 @@ public class Serialization {
                     room.getStatus());
             tab.add(serializedRoom);
         }
+        /*
         FWaitingRoomsList.startFWaitingRoomsList(builder);
         for (int serializedRoom: tab) {
             FWaitingRoomsList.addWaitingRoom(builder, serializedRoom);
         }
         int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
-        builder.finish(readyList);
+        builder.finish(readyList);*/
+        int[] tab1 = new int[tab.size()];
+        for(int i = 0; i < tab.size(); i++) {
+            tab1[i] = tab.get(i);
+        }
+        int b = FWaitingRoomsList.createWaitingRoomVector(builder, tab1);
+        FWaitingRoomsList.startFWaitingRoomsList(builder);
+        FWaitingRoomsList.addWaitingRoom(builder, b);
+        int wynik = FWaitingRoomsList.endFWaitingRoomsList(builder);
+        builder.finish(wynik);
         return builder.sizedByteArray();
     }
 
