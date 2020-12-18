@@ -1,6 +1,7 @@
 package mainServer;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import mainServer.schemas.FChooseWaitingRoom.FChooseWaitingRoom;
 import mainServer.schemas.FError.FError;
 import mainServer.schemas.FGame.FTeam;
 import mainServer.schemas.FLoggingClient.FLoggingClient;
@@ -22,12 +23,14 @@ public class Serialization {
      * @param s socket
      * @return
      */
-     static boolean deserialize(byte[] data, byte version, Socket s) {
+     static byte[] deserialize(byte[] data, int version, Socket s) {
         switch((int) version) {
             case 1:
                 //deserializeTestData(data);
             case 2:
-                return deserializeLoggingClient(data, s);
+               // return deserializeLoggingClient(data, s);
+            case 6:
+                return deserializeChooseWaitingRoom(data);
             default:
                 deserializeTestData(data);
         }
@@ -145,5 +148,12 @@ public class Serialization {
         System.out.println("some_integer: " + some_integer);
         System.out.println("some_string: " + some_string);
         System.out.println("x: " + x + "y: " + y + "z: " + z);
+    }
+
+    private static byte[] deserializeChooseWaitingRoom(byte[] data) {
+        FChooseWaitingRoom chooseWaitingRoom = FChooseWaitingRoom.getRootAsFChooseWaitingRoom(ByteBuffer.wrap(data));
+        int roomId = chooseWaitingRoom.id();
+        byte[] bytes = serializeWaitingRoom(Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId));
+        return bytes;
     }
 }
