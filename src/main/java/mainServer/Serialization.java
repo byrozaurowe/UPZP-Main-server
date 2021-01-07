@@ -38,6 +38,8 @@ public class Serialization {
                 return deserializeNewWaitingRoom(data, s);
             case 6:
                 return deserializeChooseWaitingRoom(data);
+            case 8:
+                return deserializeVehicle(data, s);
             default:
                 deserializeTestData(data);
         }
@@ -57,7 +59,7 @@ public class Serialization {
                 break;
             case 7:
                 return serializeWaitingRoomsList(data);
-            case 8:
+            case 4:
                 return serializeWaitingRoom(data);
             default:
                 return serializeTestData();
@@ -227,6 +229,33 @@ public class Serialization {
         int clientsMax = newWaitingRoom.clientsMax();
         Client host = Main.server.clientsCoordinator.findClientBySocket(s);
         return new WaitingRoom(city, host, clientsMax);
+    }
+
+    private static Object deserializeVehicle(byte[] data, Socket s) {
+        mainServer.schemas.FWaitingRoom.FVehicle vehicle = mainServer.schemas.FWaitingRoom.FVehicle.getRootAsFVehicle(ByteBuffer.wrap(data));
+
+        Vehicle.VehicleType type = null;
+        switch (vehicle.vehicleType()) {
+            case 0:
+                type = Vehicle.VehicleType.Pedestrian;
+            case 1:
+                type = Vehicle.VehicleType.Cyclist;
+            case 2:
+                type = Vehicle.VehicleType.Pedestrian;
+            default:
+                break;
+        }
+        int velocity = vehicle.velocity();
+
+        Client client = Main.server.clientsCoordinator.findClientBySocket(s);
+        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(client);
+        Team team = room.getTeamByClient(client);
+        boolean isChanged = team.changeVehicle(type, velocity, client);
+
+        if (isChanged == true) { //udało się zmienić pojazd, wysyłamy wszystkim w waiting roomie jego nowy stan
+            return room;
+        }
+        return false;
     }
 
 }

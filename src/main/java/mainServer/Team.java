@@ -45,6 +45,24 @@ public class Team {
         else return false;
     }
 
+    boolean isClientInTeam(Client client) {
+        for (Client c : clients) {
+            if (c == client) return true;
+        }
+        return false;
+    }
+
+    public boolean changeVehicle(Vehicle.VehicleType type, int velocity, Client client) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.free == true && vehicle.velocity == velocity && vehicle.type == type) {
+                vehicle.free = false;
+                client.setVehicle(vehicle);
+                return true;
+            }
+        }
+        return false;
+    }
+
     int clientsSize() {
         return clients.size();
     }

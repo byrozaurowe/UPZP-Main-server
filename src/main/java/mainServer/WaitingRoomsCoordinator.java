@@ -40,4 +40,11 @@ public class WaitingRoomsCoordinator {
         }
         return null;
     }
+
+    public WaitingRoom getWaitingRoomByClient(Client client) {
+        for (WaitingRoom room : waitingRooms) {
+            if (room.isClientInRoom(client) == true) return room;
+        }
+        return null;
+    }
 }

@@ -33,6 +33,12 @@ public class PacketHandler {
                     toSend = buildWaitingRoom(wr);
                     wr.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
                     break;
+                case 8:
+                    if ((boolean)o != false) {
+                        WaitingRoom r = (WaitingRoom) o;
+                        r.sendToPlayersInRoom(buildWaitingRoom(r));
+                    }
+                    else toSend = buildError("vehicle not changed");
             }
         }
         client.write(ByteBuffer.wrap(toSend));
@@ -54,7 +60,7 @@ public class PacketHandler {
     }
 
     private static byte[] buildWaitingRoom(WaitingRoom room) {
-        byte[] serialized = Serialization.serialize(room, 8);
+        byte[] serialized = Serialization.serialize(room, 4);
         return Header.encode((byte)8, serialized, true);
     }
 }

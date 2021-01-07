@@ -89,6 +89,17 @@ public class WaitingRoom {
         }
     }
 
+    public boolean isClientInRoom (Client client) {
+        if (team1.isClientInTeam(client) == true || team2.isClientInTeam(client) == true) return true;
+        else return false;
+    }
+
+    public Team getTeamByClient(Client client) {
+        if (team1.isClientInTeam(client) == true) return team1;
+        if (team2.isClientInTeam(client) == true) return team2;
+        return null;
+    }
+
     public WaitingRoom(String city, Client host, int clientsMax) {
         this.city = city;
         this.host = host;
