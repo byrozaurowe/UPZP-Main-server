@@ -105,6 +105,7 @@ public class Serialization {
         }
         /*
         FWaitingRoomsList.startFWaitingRoomsList(builder);
+        FWaitingRoomsList.createWaitingRoomVector(builder, tab.toArray());
         for (int serializedRoom: tab) {
             FWaitingRoomsList.addWaitingRoom(builder, serializedRoom);
         }
@@ -144,9 +145,12 @@ public class Serialization {
             serializedClientTab.add(serializedClient);
         }
         mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
-        for (int client : serializedClientTab) {
-            mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, client);
+        int[] clientTab = new int [serializedClientTab.size()];
+        for (int i = 0; i < serializedClientTab.size(); i++) {
+            clientTab[i] = serializedClientTab.get(i);
         }
+        int b = mainServer.schemas.FWaitingRoom.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[0] = FTeam.endFTeam(builder);
         serializedClientTab = new ArrayList<>();
         for (Client client : room.getClients(2)) {
@@ -164,9 +168,12 @@ public class Serialization {
             serializedClientTab.add(serializedClient);
         }
         mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
-        for (int client : serializedClientTab) {
-            mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, client);
+        clientTab = new int [serializedClientTab.size()];
+        for (int i = 0; i < serializedClientTab.size(); i++) {
+            clientTab[i] = serializedClientTab.get(i);
         }
+        b = mainServer.schemas.FWaitingRoom.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[1] = FTeam.endFTeam(builder);
         int serializedTeamsVector = mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
