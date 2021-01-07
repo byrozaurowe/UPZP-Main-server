@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class Server implements Runnable {
         }
         try {
             test();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         while (true) {
@@ -52,7 +53,7 @@ public class Server implements Runnable {
                 }
             } catch (WrongPacketException e) {
                 System.out.println(e.getMessage());
-            } catch (IOException e) {
+            } catch (IOException | SQLException e) {
                 System.out.println(e.getMessage());
             }
             finally {
@@ -61,11 +62,13 @@ public class Server implements Runnable {
         }
     }
 
-    void test() throws IOException {
+    void test() throws IOException, SQLException {
         WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()), 20);
         waitingRoomsCoordinator.addWaitingRoom(w);
         WaitingRoom wr = new WaitingRoom("Wrochrław", new Client("Worjtek", InetAddress.getByName("127.0.1.1"), new Socket()), 20);
         waitingRoomsCoordinator.addWaitingRoom(wr);
+        System.out.println(DatabaseHandler.getInstance().loggIn("player1", "player1"));
+
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */
@@ -80,7 +83,7 @@ public class Server implements Runnable {
     }
 
     /** Obsługa wiadomości otrzymanej od klienta */
-    private void handleRead(SelectionKey key) throws WrongPacketException, IOException {
+    private void handleRead(SelectionKey key) throws WrongPacketException, IOException, SQLException {
         // create a ServerSocketChannel to read the request
         SocketChannel client = (SocketChannel) key.channel();
         byte[] data = new byte[1024];

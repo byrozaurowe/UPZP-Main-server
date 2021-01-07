@@ -20,10 +20,10 @@ public class Team {
             vehicles[i] = new Vehicle(Vehicle.VehicleType.Car, 40);
         }
         for(int i = cars; i < cars+bikes; i++) {
-            vehicles[i] = new Vehicle(Vehicle.VehicleType.Car, 20);
+            vehicles[i] = new Vehicle(Vehicle.VehicleType.Cyclist, 20);
         }
         for(int i = cars+bikes; i < cars+bikes+pedestrians; i++) {
-            vehicles[i] = new Vehicle(Vehicle.VehicleType.Car, 5);
+            vehicles[i] = new Vehicle(Vehicle.VehicleType.Pedestrian, 5);
         }
     }
 
@@ -54,13 +54,19 @@ public class Team {
 
     public boolean changeVehicle(Vehicle.VehicleType type, int velocity, Client client) {
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.free == true && vehicle.velocity == velocity && vehicle.type == type) {
+            if (vehicle.free && vehicle.velocity == velocity && vehicle.type == type) {
                 vehicle.free = false;
                 client.setVehicle(vehicle);
                 return true;
             }
         }
         return false;
+    }
+
+    void leaveTeam(Client client) {
+        clients.remove(client);
+        System.out.println("Usunięto klienta z drużyny: " + client.getName());
+        client.setClientStatus(ClientStatus.WAITING_ROOM_LIST);
     }
 
     int clientsSize() {

@@ -3,6 +3,7 @@ package mainServer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /** Klasa obsługująca otrzymany pakiet od klienta */
@@ -12,7 +13,7 @@ public class PacketHandler {
      * @param client socketChannel, od którego otrzymano obiekt
      * @throws WrongPacketException błąd podczas odkodowywania pakietu
      */
-    static void handleData(byte[] receivedData, SocketChannel client) throws WrongPacketException, IOException {
+    static void handleData(byte[] receivedData, SocketChannel client) throws WrongPacketException, IOException, SQLException {
         Header.Return returned = Header.decode(receivedData);
         Object o = Serialization.deserialize(returned.bytes, returned.version, client.socket());
         byte[] toSend = new byte[0];
@@ -26,6 +27,7 @@ public class PacketHandler {
                 case 5:
                     WaitingRoom room = (WaitingRoom) o;
                     Main.server.waitingRoomsCoordinator.addWaitingRoom(room);
+                    room.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
                     toSend = buildWaitingRoom(room);
                     break;
                 case 6:
@@ -34,7 +36,7 @@ public class PacketHandler {
                     wr.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
                     break;
                 case 8:
-                    if ((boolean)o != false) {
+                    if ((boolean) o) {
                         WaitingRoom r = (WaitingRoom) o;
                         r.sendToPlayersInRoom(buildWaitingRoom(r));
                     }

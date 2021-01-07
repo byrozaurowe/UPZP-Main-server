@@ -136,7 +136,8 @@ public class ClientsCoordinator {
             System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
             clients.remove(client);
-        } catch (NullPointerException e) {
+            DatabaseHandler.getInstance().playerDisconnected(findClientBySocket(s).getId());
+        } catch (NullPointerException | SQLException e) {
             System.out.println("Disconnect Client error " + e.getMessage());
         }
     }

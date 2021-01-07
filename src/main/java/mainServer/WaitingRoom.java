@@ -46,25 +46,64 @@ public class WaitingRoom {
         return null;
     }
 
+    /** Funkcja usuwająca klienta z Waiting roomu
+     * @param client klient
+     * @return czy się powiodło
+     */
+    public boolean leaveWaitingRoom(Client client) {
+        if(isHost(client)){
+            if(!changeHost()) {
+                Main.server.waitingRoomsCoordinator.removeWaitingRoom(this);
+                return true;
+            }
+        }
+        if(team1.clients.contains(client)) {
+            team1.leaveTeam(client);
+            return true;
+        }
+        else if(team2.clients.contains(client)) {
+            team2.leaveTeam(client);
+            return true;
+        }
+        return false;
+    }
+
+    /** Funkcja dołączająca klienta do drużyny
+     * @param client klient
+     * @return czy się powiodło?
+     */
     public boolean joinTeam(Client client) {
+        client.setClientStatus(ClientStatus.WAITING_ROOM);
         if (team1.clientsSize() <= team2.clientsSize()) {
-            if (team1.joinTeam(client)) return true;
-            else return team2.joinTeam(client);
+            if (team1.joinTeam(client)) {
+                return true;
+            }
+            else {
+                return team2.joinTeam(client);
+            }
         }
         else {
-            if (team2.joinTeam(client)) return true;
-            else return team1.joinTeam(client);
+            if (team2.joinTeam(client)) {
+                return true;
+            }
+            else {
+                return team1.joinTeam(client);
+            }
         }
     }
 
     public boolean canStart() {
-        return team1.clientsSize() >= 10 && team2.clientsSize() >= 10;
+        return team1.clientsSize() >= clientsMax/2 && team2.clientsSize() >= clientsMax/2;
     }
 
     public boolean isHost(Client client) {
         return client == host;
     }
 
+
+    /** Funkcja zmieniająca hosta
+     * @return czy się powiodło?
+     */
     public boolean changeHost() {
         if (team1.clientsSize() > 0) {
             host = team1.getFirstClient();
@@ -90,16 +129,20 @@ public class WaitingRoom {
     }
 
     public boolean isClientInRoom (Client client) {
-        if (team1.isClientInTeam(client) == true || team2.isClientInTeam(client) == true) return true;
-        else return false;
+        return team1.isClientInTeam(client) || team2.isClientInTeam(client);
     }
 
     public Team getTeamByClient(Client client) {
-        if (team1.isClientInTeam(client) == true) return team1;
-        if (team2.isClientInTeam(client) == true) return team2;
+        if (team1.isClientInTeam(client)) return team1;
+        if (team2.isClientInTeam(client)) return team2;
         return null;
     }
 
+    /** Konstruktor Waiting roomu (poczekalni)
+     * @param city miasto, gdzie odbędzie się rozgrywka
+     * @param host klient, który jest administratorem gry
+     * @param clientsMax maksymalna liczba graczy w grze
+     */
     public WaitingRoom(String city, Client host, int clientsMax) {
         this.city = city;
         this.host = host;

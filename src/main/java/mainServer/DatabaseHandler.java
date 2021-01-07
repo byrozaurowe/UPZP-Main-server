@@ -27,6 +27,7 @@ public class DatabaseHandler {
         return DATABASE_HANDLER;
     }
 
+    /** Konnstruktor obslugi bazy danych */
     private DatabaseHandler() {
         if(DATABASE_HANDLER == null) {
             try {
@@ -70,9 +71,12 @@ public class DatabaseHandler {
         } catch (SQLException se) { /*can't do anything */ }
     }
 
+    /** Funkcja logowanie do bazy danych
+     * @param login login klienta
+     * @param haslo hasło klienta
+     * @return 1 jesli poprawnie zalogowanie, 0 jesli nie
+     */
     public Object loggIn(String login, String haslo) throws SQLException {
-//        String query = "insert into main (login, password, mail, date_reg) VALUES ('test', 'test', 'test', '2020-11-19')";
-        // exist
         //String account_login_1 = "zxcv";
         //String account_pass_1 = "123456";
 
@@ -82,4 +86,20 @@ public class DatabaseHandler {
         return rs.getObject(1);
     }
 
+    /** Funkcja informująca bazę o rozłączeniu użytkownika
+     * @param clientId id klienta
+     */
+    public void playerDisconnected(int clientId) throws SQLException {
+        String query_online = "";
+        //ResultSet rs = stmt.executeQuery(query_online);
+        //rs.next();
+    }
+
+    /** Funkcja czytająca z bazy id wolnej gry */
+    public int getFreeGameId() throws SQLException {
+        String query_loggin = "SELECT * FROM stat_game ORDER BY id DESC LIMIT 1";
+        ResultSet rs = stmt.executeQuery(query_loggin);
+        rs.next();
+        return (int) rs.getObject(1);
+    }
 }
