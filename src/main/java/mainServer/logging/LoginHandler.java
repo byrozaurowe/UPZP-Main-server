@@ -24,8 +24,6 @@ public class LoginHandler {
         }
         else {
             System.out.println("Błędne logowanie");
-            byte [] toSend = PacketHandler.buildError("Błędne login lub hasło");
-            Main.server.clientsCoordinator.sendTo(logClient.getSocket(), toSend);
             //Main.server.clientsCoordinator.disconnectLoggClient(logClient);
             return false;
         }

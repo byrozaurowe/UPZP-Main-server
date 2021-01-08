@@ -31,7 +31,7 @@ public class Serialization {
      static Object deserialize(byte[] data, int version, Socket s) {
         switch(version) {
             case 1:
-                //deserializeTestData(data);
+
             case 2:
                 return deserializeLoggingClient(data, s);
             case 5:
@@ -40,8 +40,6 @@ public class Serialization {
                 return deserializeChooseWaitingRoom(data);
             case 8:
                 return deserializeVehicle(data, s);
-            default:
-                deserializeTestData(data);
         }
         return null;
     }
@@ -61,8 +59,6 @@ public class Serialization {
                 return serializeWaitingRoomsList(data);
             case 4:
                 return serializeWaitingRoom(data);
-            default:
-                return serializeTestData();
         }
         return null;
     }
@@ -105,14 +101,7 @@ public class Serialization {
                     room.getStatus());
             tab.add(serializedRoom);
         }
-        /*
-        FWaitingRoomsList.startFWaitingRoomsList(builder);
-        FWaitingRoomsList.createWaitingRoomVector(builder, tab.toArray());
-        for (int serializedRoom: tab) {
-            FWaitingRoomsList.addWaitingRoom(builder, serializedRoom);
-        }
-        int readyList = FWaitingRoomsList.endFWaitingRoomsList(builder);
-        builder.finish(readyList);*/
+
         int[] tab1 = new int[tab.size()];
         for(int i = 0; i < tab.size(); i++) {
             tab1[i] = tab.get(i);
@@ -186,35 +175,6 @@ public class Serialization {
         int serializedRoom = mainServer.schemas.FWaitingRoom.FWaitingRoom.endFWaitingRoom(builder);
         builder.finish((serializedRoom));
         return builder.sizedByteArray();
-    }
-
-    private static byte[] serializeTestData() {
-        FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        int someString = builder.createString("qwer");
-        Tester.startTester(builder);
-        Tester.addPos(builder, Vec3.createVec3(builder, 1.0f, 2.0f, 3.0f));
-        Tester.addSomeString(builder, someString);
-        Tester.addSomeInteger(builder, 123);
-        int test = Tester.endTester(builder);
-        builder.finish(test);
-        byte[] buf = builder.sizedByteArray();
-        return Header.encode((byte)1, buf, true);
-    }
-
-    private static void deserializeTestData(byte[] data) {
-        Tester tester = Tester.getRootAsTester(ByteBuffer.wrap(data));
-        int some_integer = tester.someInteger();
-        String some_string = tester.someString();
-        Vec3 pos = tester.pos();
-        float x = pos.x();
-        float y = pos.y();
-        float z = pos.z();
-
-        System.out.println("Received message: " );
-        System.out.println("[Tester]");
-        System.out.println("some_integer: " + some_integer);
-        System.out.println("some_string: " + some_string);
-        System.out.println("x: " + x + "y: " + y + "z: " + z);
     }
 
     private static Object deserializeChooseWaitingRoom(byte[] data) {

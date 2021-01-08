@@ -67,8 +67,6 @@ public class Server implements Runnable {
         waitingRoomsCoordinator.addWaitingRoom(w);
         WaitingRoom wr = new WaitingRoom("Wrochrław", new Client("Worjtek", InetAddress.getByName("127.0.1.1"), new Socket()), 20);
         waitingRoomsCoordinator.addWaitingRoom(wr);
-        System.out.println(DatabaseHandler.getInstance().loggIn("player1", "player1"));
-
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */
@@ -92,9 +90,11 @@ public class Server implements Runnable {
         byte[] a = new byte[1024];
         Arrays.fill(a, (byte)0);
         if(Arrays.equals(a, data)) {
-            clientsCoordinator.disconnect(client.socket());
-            //System.out.println("Rozłączono klienta " + client.socket().getInetAddress());
-            //client.socket().close();
+            if(clientsCoordinator.findClientBySocket(client.socket()) != null) {
+                clientsCoordinator.disconnect(client.socket());
+            } else {
+                clientsCoordinator.disconnectLoggClient(client.socket());
+            }
         }
         else {
             System.out.println("Reading...");

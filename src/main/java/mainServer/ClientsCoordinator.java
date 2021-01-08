@@ -135,19 +135,19 @@ public class ClientsCoordinator {
             Client client = findClientBySocket(s);
             System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
-            clients.remove(client);
             DatabaseHandler.getInstance().playerDisconnected(findClientBySocket(s).getId());
+            clients.remove(client);
         } catch (NullPointerException | SQLException e) {
             System.out.println("Disconnect Client error " + e.getMessage());
         }
     }
 
     /** Metoda rozłączająca klienta, który chce się zalogować
-     * @param loggingClient klient, który chce się zalogować
+     * @param s socket klienta, który chce się zalogować
      */
-    public void disconnectLoggClient(LoggingClient loggingClient) {
+    public void disconnectLoggClient(Socket s) {
         try {
-            LoggingClient client = findLogClientBySocket(loggingClient.getSocket());
+            LoggingClient client = findLogClientBySocket(s);
             System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
             loggingClients.remove(client);

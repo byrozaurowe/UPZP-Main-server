@@ -22,11 +22,15 @@ public class PacketHandler {
                 case 1:
                     break;
                 case 2:
-                    toSend = buildWaitingRoomsList();
+                    if(o instanceof Boolean && !(boolean) o) {
+                        toSend = buildError("Błędny login lub hasło");
+                    } else {
+                        toSend = buildWaitingRoomsList();
+                    }
                     break;
                 case 5:
                     WaitingRoom room = (WaitingRoom) o;
-                    Main.server.waitingRoomsCoordinator.addWaitingRoom(room);
+                    Main.server.waitingRoomsCoordinator.newWaitingRoom(room);
                     room.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
                     toSend = buildWaitingRoom(room);
                     break;

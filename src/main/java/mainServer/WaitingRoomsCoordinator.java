@@ -28,7 +28,10 @@ public class WaitingRoomsCoordinator {
         waitingRooms.remove(w);
     }
 
-    public void addWaitingRoom(WaitingRoom waitingRoom) throws IOException, SQLException {
+    /** Tworzenie nowego waiting roomu w trakcie działania serwera
+     * @param waitingRoom pokój do utworzenia
+     */
+    public void newWaitingRoom(WaitingRoom waitingRoom) throws IOException, SQLException {
         // przydzielanie id, bedzie do zmiany bo baza musi nam wyslac
         int id = DatabaseHandler.getInstance().getFreeGameId();
         if(waitingRooms.isEmpty()) {
@@ -39,6 +42,20 @@ public class WaitingRoomsCoordinator {
         }
         waitingRooms.add(waitingRoom);
         Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+    }
+
+    /** Dodanie waiting roomu na początku działania serwera
+     * @param waitingRoom pokój do dodania
+     */
+    public void addWaitingRoom(WaitingRoom waitingRoom) throws SQLException {
+        int id = DatabaseHandler.getInstance().getFreeGameId();
+        if(waitingRooms.isEmpty()) {
+            waitingRoom.setId(1);
+        }
+        else {
+            waitingRoom.setId(id + 1);
+        }
+        waitingRooms.add(waitingRoom);
     }
 
     public ArrayList<WaitingRoom> getWaitingRooms() { return waitingRooms; }
