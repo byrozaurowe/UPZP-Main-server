@@ -1,11 +1,11 @@
 1 - error: root FError
 2 - loggingClient: root FLoggingClient
-3 - client: root FClient
+3 - message: root FMessage
 4 - waitingRoom: root FWaitingRoom
 5 - newWaitingRoom: root FNewWaitingRoom
 6 - chooseWaitingRoom: root FChooseWaitingRoom
 7 - waitingRoomsList: FWaitingRoomsList
 8 - waitingRoom: root FVehicle
-9 - startGame
+9 - gameStarted: root FGameStarted
 
 10 - game: root FGame
