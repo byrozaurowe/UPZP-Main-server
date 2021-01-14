@@ -92,11 +92,11 @@ public class Serialization {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         ArrayList<Integer> tab = new ArrayList<>();
         for (WaitingRoom room : (ArrayList<WaitingRoom>) list) {
-            int city = builder.createString(room.getCity());
+            int city = builder.createString(room.getHostName());
+            int hostName = builder.createString(room.getCity());
             int serializedRoom = FWaitingRoom.createFWaitingRoom(builder,
-                    room.getId(),
                     city,
-                    room.getHost(),
+                    hostName,
                     room.getClientsLoggedVal(),
                     room.getClientsMax(),
                     room.getStatus());

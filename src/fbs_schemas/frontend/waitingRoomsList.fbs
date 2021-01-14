@@ -1,9 +1,8 @@
 namespace mainServer.schemas.FWaitingRoomsList;
 
 table FWaitingRoom {
-    id:int;
     city:string;
-    host:int;
+    host:string;
     clientsLogged:int;
     clientsMax:int;
     status:bool;

@@ -32,6 +32,7 @@ public class WaitingRoom {
     public Team[] getTeams() { Team[] teams = new Team[]{team1, team2}; return teams; }
     public String getCity() { return city; }
     public int getHost() { return host.getId(); }
+    public String getHostName() { return host.getName(); }
     public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
     public int getClientsMax() { return clientsMax; }
     public boolean getStatus() { return status; }

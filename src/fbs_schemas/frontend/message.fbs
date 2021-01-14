@@ -1,0 +1,9 @@
+namespace mainServer.schemas.FMessage;
+
+enum FMessageType:byte {StartGame, LeaveRoom}
+
+table FMessage {
+    messageType:FMessageType;
+}
+
+root_type FMessage;

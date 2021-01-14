@@ -1,8 +1,0 @@
-namespace mainServer.schemas.FClient;
-
-table FClient {
-  name:string;
-  ipAddress:string;
-}
-
-root_type FClient;

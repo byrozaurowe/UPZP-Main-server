@@ -1,0 +1,8 @@
+namespace mainServer.schemas.FGameStarted;
+
+table FGameStarted {
+    ip:string;
+    port:int;
+}
+
+root_type FGameStarted;
