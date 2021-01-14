@@ -40,6 +40,7 @@ public class Serialization {
                 return deserializeChooseWaitingRoom(data);
             case 8:
                 return deserializeVehicle(data, s);
+            default:
         }
         return null;
     }
@@ -117,8 +118,6 @@ public class Serialization {
     private static byte[] serializeWaitingRoom(Object data) {
         WaitingRoom room = (WaitingRoom)data;
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
         int[] serializedTeam = new int[2];
         ArrayList<Integer> serializedClientTab = new ArrayList<>();
         for (Client client : room.getClients(1)) {
@@ -166,9 +165,11 @@ public class Serialization {
         b = mainServer.schemas.FWaitingRoom.FTeam.createClientsVector(builder, clientTab);
         mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[1] = FTeam.endFTeam(builder);
+        int serializedCity = builder.createString(room.getCity());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
         int serializedTeamsVector = mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
-        int serializedCity = builder.createString(room.getCity());
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addCity(builder, serializedCity);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax());
@@ -216,6 +217,11 @@ public class Serialization {
             return room;
         }
         return false;
+    }
+
+    private static Object deserializeStartGame(byte[] data, Socket s) {
+        //tutaj trzeba wystartować nową grę, pobrać od podprocesu port i ip i wysłać je do wszystkich użytkowników w waiting roomie
+        return null;
     }
 
 }

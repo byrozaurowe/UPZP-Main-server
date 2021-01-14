@@ -6,5 +6,6 @@
 6 - chooseWaitingRoom: root FChooseWaitingRoom
 7 - waitingRoomsList: FWaitingRoomsList
 8 - waitingRoom: root FVehicle
+9 - startGame
 
 10 - game: root FGame
