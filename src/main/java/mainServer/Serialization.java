@@ -95,6 +95,7 @@ public class Serialization {
             int city = builder.createString(room.getHostName());
             int hostName = builder.createString(room.getCity());
             int serializedRoom = FWaitingRoom.createFWaitingRoom(builder,
+                    room.getId(),
                     city,
                     hostName,
                     room.getClientsLoggedVal(),
@@ -213,7 +214,7 @@ public class Serialization {
         Team team = room.getTeamByClient(client);
         boolean isChanged = team.changeVehicle(type, velocity, client);
 
-        if (isChanged == true) { //udało się zmienić pojazd, wysyłamy wszystkim w waiting roomie jego nowy stan
+        if (isChanged) { //udało się zmienić pojazd, wysyłamy wszystkim w waiting roomie jego nowy stan
             return room;
         }
         return false;
