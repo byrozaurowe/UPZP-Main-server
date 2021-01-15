@@ -48,7 +48,8 @@ public class WaitingRoomsCoordinator {
      * @param waitingRoom pokój do dodania
      */
     public void addWaitingRoom(WaitingRoom waitingRoom) throws SQLException {
-        int id = DatabaseHandler.getInstance().getFreeGameId();
+        //int id = DatabaseHandler.getInstance().getFreeGameId();
+        int id = 1;
         if(waitingRooms.isEmpty()) {
             waitingRoom.setId(1);
         }

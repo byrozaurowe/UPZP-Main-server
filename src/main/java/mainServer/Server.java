@@ -17,7 +17,7 @@ public class Server implements Runnable {
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
         waitingRoomsCoordinator = new WaitingRoomsCoordinator();
-        DatabaseHandler.getInstance();
+        //DatabaseHandler.getInstance();
         ServerSocketChannel socket;
         try {
             selector = Selector.open();

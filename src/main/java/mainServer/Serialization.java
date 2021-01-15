@@ -135,12 +135,12 @@ public class Serialization {
             int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
             serializedClientTab.add(serializedClient);
         }
-        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
         int[] clientTab = new int [serializedClientTab.size()];
         for (int i = 0; i < serializedClientTab.size(); i++) {
             clientTab[i] = serializedClientTab.get(i);
         }
         int b = mainServer.schemas.FWaitingRoom.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
         mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[0] = FTeam.endFTeam(builder);
         serializedClientTab = new ArrayList<>();
@@ -158,12 +158,12 @@ public class Serialization {
             int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
             serializedClientTab.add(serializedClient);
         }
-        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
         clientTab = new int [serializedClientTab.size()];
         for (int i = 0; i < serializedClientTab.size(); i++) {
             clientTab[i] = serializedClientTab.get(i);
         }
         b = mainServer.schemas.FWaitingRoom.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FWaitingRoom.FTeam.startFTeam(builder);
         mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[1] = FTeam.endFTeam(builder);
         int serializedCity = builder.createString(room.getCity());
