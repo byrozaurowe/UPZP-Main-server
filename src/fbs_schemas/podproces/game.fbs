@@ -4,12 +4,11 @@ enum FVehicleType:byte {Pedestrian, Cyclist, Car}
 
 table FVehicle {
     vehicleType:FVehicleType;
-    velocity:int;
 }
 
 table FClient {
     name:string;
-    id:int;
+    id:uint32;
     ipAddress:string;
     port:int;
     vehicle:FVehicle;
@@ -22,9 +21,6 @@ table FTeam {
 table FGame {
   id:int;
   teams:[FTeam];
-  city:string;
-  host:int;
-  clientsMax:int;
 }
 
 root_type FGame;

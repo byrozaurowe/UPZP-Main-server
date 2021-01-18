@@ -54,7 +54,7 @@ public class Team {
 
     public boolean changeVehicle(Vehicle.VehicleType type, int velocity, Client client) {
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.free && vehicle.velocity == velocity && vehicle.type == type) {
+            if (vehicle.free && vehicle.type == type) {
                 vehicle.free = false;
                 client.setVehicle(vehicle);
                 return true;
@@ -73,8 +73,12 @@ public class Team {
         return clients.size();
     }
 
-    Client getFirstClient() {
-        return clients.get(1);
+    Client getNewHost(Client host) {
+        for(Client c : clients) {
+            if(c != null && c != host)
+                return c;
+        }
+        return null;
     }
 
     ArrayList<Client> getClients() { return clients; }

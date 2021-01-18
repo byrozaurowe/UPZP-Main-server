@@ -55,15 +55,18 @@ public class WaitingRoom {
         if(isHost(client)){
             if(!changeHost()) {
                 Main.server.waitingRoomsCoordinator.removeWaitingRoom(this);
+                client.enterWaitingRoomList();
                 return true;
             }
         }
         if(team1.clients.contains(client)) {
             team1.leaveTeam(client);
+            client.enterWaitingRoomList();
             return true;
         }
         else if(team2.clients.contains(client)) {
             team2.leaveTeam(client);
+            client.enterWaitingRoomList();
             return true;
         }
         return false;
@@ -74,7 +77,7 @@ public class WaitingRoom {
      * @return czy się powiodło?
      */
     public boolean joinTeam(Client client) {
-        client.setClientStatus(ClientStatus.WAITING_ROOM);
+        client.enterWaitingRoom();
         if (team1.clientsSize() <= team2.clientsSize()) {
             if (team1.joinTeam(client)) {
                 return true;
@@ -106,15 +109,17 @@ public class WaitingRoom {
      * @return czy się powiodło?
      */
     public boolean changeHost() {
-        if (team1.clientsSize() > 0) {
-            host = team1.getFirstClient();
+        Client h = team1.getNewHost(host);
+        if (h != null) {
+            host = team1.getNewHost(host);
             return true;
         }
-        else if (team2.clientsSize() > 0) {
-            host = team2.getFirstClient();
+        h = team2.getNewHost(host);
+        if (h != null) {
+            host = team2.getNewHost(host);
             return true;
         }
-        else return false;
+        return false;
     }
 
     /** Wysyła wiadomość to wszystkich w tym waiting roomie

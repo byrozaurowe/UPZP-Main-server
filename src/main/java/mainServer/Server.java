@@ -32,11 +32,7 @@ public class Server implements Runnable {
             ioException.printStackTrace();
             return;
         }
-        try {
-            test();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
+
         while (true) {
             try {
                 selector.select();

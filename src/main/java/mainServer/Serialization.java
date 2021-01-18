@@ -34,12 +34,15 @@ public class Serialization {
 
             case 2:
                 return deserializeLoggingClient(data, s);
+            case 3:
+                return deserializeMessage(data, s);
             case 5:
                 return deserializeNewWaitingRoom(data, s);
             case 6:
                 return deserializeChooseWaitingRoom(data);
             case 8:
                 return deserializeVehicle(data, s);
+
             default:
         }
         return null;
@@ -92,8 +95,8 @@ public class Serialization {
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
         ArrayList<Integer> tab = new ArrayList<>();
         for (WaitingRoom room : (ArrayList<WaitingRoom>) list) {
-            int city = builder.createString(room.getHostName());
-            int hostName = builder.createString(room.getCity());
+            int city = builder.createString(room.getCity());
+            int hostName = builder.createString(room.getHostName());
             int serializedRoom = FWaitingRoom.createFWaitingRoom(builder,
                     room.getId(),
                     city,
@@ -116,6 +119,9 @@ public class Serialization {
         return builder.sizedByteArray();
     }
 
+    public static void main(String[] args) {
+
+    }
     private static byte[] serializeWaitingRoom(Object data) {
         WaitingRoom room = (WaitingRoom)data;
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
@@ -167,9 +173,10 @@ public class Serialization {
         mainServer.schemas.FWaitingRoom.FTeam.addClients(builder, b);
         serializedTeam[1] = FTeam.endFTeam(builder);
         int serializedCity = builder.createString(room.getCity());
+        int serializedTeamsVector = mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.startFWaitingRoom(builder);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addId(builder, room.getId());
-        int serializedTeamsVector = mainServer.schemas.FWaitingRoom.FWaitingRoom.createTeamsVector(builder, serializedTeam);
+
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addCity(builder, serializedCity);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
@@ -200,11 +207,12 @@ public class Serialization {
         switch (vehicle.vehicleType()) {
             case 0:
                 type = Vehicle.VehicleType.Pedestrian;
+                break;
             case 1:
                 type = Vehicle.VehicleType.Cyclist;
+                break;
             case 2:
-                type = Vehicle.VehicleType.Pedestrian;
-            default:
+                type = Vehicle.VehicleType.Car;
                 break;
         }
         int velocity = vehicle.velocity();
@@ -214,10 +222,15 @@ public class Serialization {
         Team team = room.getTeamByClient(client);
         boolean isChanged = team.changeVehicle(type, velocity, client);
 
-        if (isChanged) { //udało się zmienić pojazd, wysyłamy wszystkim w waiting roomie jego nowy stan
+        if (isChanged) {
             return room;
         }
         return false;
+    }
+
+    private static Object deserializeMessage(byte[] data, Socket s) {
+        mainServer.schemas.FMessage.FMessage message = mainServer.schemas.FMessage.FMessage.getRootAsFMessage(ByteBuffer.wrap(data));
+        return message.messageType();
     }
 
     private static Object deserializeStartGame(byte[] data, Socket s) {

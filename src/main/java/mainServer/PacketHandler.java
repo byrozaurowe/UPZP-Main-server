@@ -16,11 +16,10 @@ public class PacketHandler {
     static void handleData(byte[] receivedData, SocketChannel client) throws WrongPacketException, IOException, SQLException {
         Header.Return returned = Header.decode(receivedData);
         Object o = Serialization.deserialize(returned.bytes, returned.version, client.socket());
-        byte[] toSend = new byte[0];
+        byte[] toSend = null;
+        Client c = Main.server.clientsCoordinator.findClientBySocket(client.socket());
         if(o != null) {
             switch((int) returned.version) {
-                case 1:
-                    break;
                 case 2:
                     if(o instanceof Boolean && !(boolean) o) {
                         toSend = buildError("Błędny login lub hasło");
@@ -28,26 +27,52 @@ public class PacketHandler {
                         toSend = buildWaitingRoomsList();
                     }
                     break;
+                case 3:
+                    byte m = (byte) o;
+                    switch(m) {
+                        case (byte)0:
+                            startGame(c);
+                            Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                        case (byte)1:
+                            WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
+                            room.leaveWaitingRoom(c);
+                            room.sendToPlayersInRoom(buildWaitingRoom(room));
+                            Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                            break;
+                    }
+                    break;
                 case 5:
                     WaitingRoom room = (WaitingRoom) o;
                     Main.server.waitingRoomsCoordinator.newWaitingRoom(room);
-                    room.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
-                    toSend = buildWaitingRoom(room);
+                    room.joinTeam(c);
+                    room.sendToPlayersInRoom(buildWaitingRoom(room));
+                    Main.server.clientsCoordinator.sendToAllWaitingRoomList();
                     break;
                 case 6:
-                    WaitingRoom wr = (WaitingRoom) o;
-                    toSend = buildWaitingRoom(wr);
-                    wr.joinTeam(Main.server.clientsCoordinator.findClientBySocket(client.socket()));
+                    if(c.getClientStatus() == ClientStatus.WAITING_ROOM_LIST) {
+                        WaitingRoom wr = (WaitingRoom) o;
+                        wr.joinTeam(c);
+                        wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                    } else {
+                        toSend = buildError("Klient już dołączył do innej gry. Opuszczanie...");
+                        client.write(ByteBuffer.wrap(toSend));
+                        Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c).leaveWaitingRoom(c);
+                        WaitingRoom wr = (WaitingRoom) o;
+                        wr.joinTeam(c);
+                        wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                        Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                    }
                     break;
                 case 8:
-                    if ((boolean) o) {
+                    if(o instanceof WaitingRoom) {
                         WaitingRoom r = (WaitingRoom) o;
                         r.sendToPlayersInRoom(buildWaitingRoom(r));
                     }
-                    else toSend = buildError("vehicle not changed");
+                    else toSend = buildError("Nie udało się zmienić pojazdu!");
             }
         }
-        client.write(ByteBuffer.wrap(toSend));
+        if(toSend != null)
+            client.write(ByteBuffer.wrap(toSend));
     }
 
     /** Buduje pakiet błędu
@@ -55,7 +80,7 @@ public class PacketHandler {
      * @return pakiet z headerem
      */
     public static byte[] buildError(String string) {
-        byte[] serialized = Serialization.serialize(string.getBytes(), 1);
+        byte[] serialized = Serialization.serialize(string, 1);
         return Header.encode((byte)1, serialized, true);
     }
 
@@ -67,6 +92,16 @@ public class PacketHandler {
 
     private static byte[] buildWaitingRoom(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 4);
-        return Header.encode((byte)8, serialized, true);
+        return Header.encode((byte)4, serialized, true);
+    }
+
+    private static void startGame(Client c) throws IOException {
+        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
+        if(room.canStart()) {
+            c.enterGame();
+        }
+        else {
+            c.getSocket().getChannel().write(ByteBuffer.wrap(buildError("Za mało osób, żeby wystartować grę!")));
+        }
     }
 }

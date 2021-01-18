@@ -41,6 +41,12 @@ public class Client {
         this.clientStatus = clientStatus;
     }
 
+    public void enterWaitingRoomList() { this.clientStatus = ClientStatus.WAITING_ROOM_LIST; }
+
+    public void enterWaitingRoom() { this.clientStatus = ClientStatus.WAITING_ROOM; }
+
+    public void enterGame() { this.clientStatus = ClientStatus.IN_GAME; }
+
     public Client(String name, InetAddress ipAddress, Socket socket) {
         this.name = name;
         this.ipAddress = ipAddress;
