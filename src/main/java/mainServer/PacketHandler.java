@@ -112,9 +112,15 @@ public class PacketHandler {
         WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
         if(room.startGame()) {
             room.sendToPlayersInRoom(buildGameStarted(room));
+            buildGame(room);
         }
         else {
             c.getSocket().getChannel().write(ByteBuffer.wrap(buildError("Za mało osób, żeby wystartować grę!")));
         }
+    }
+
+    private static byte[] buildGame(WaitingRoom room) {
+        byte[] serialized = Serialization.serialize(room, 10);
+        return null;
     }
 }

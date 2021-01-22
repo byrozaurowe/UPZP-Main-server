@@ -21,35 +21,21 @@ public final class FGame extends Table {
   public int teamsLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
   public mainServer.schemas.FGame.FTeam.Vector teamsVector() { return teamsVector(new mainServer.schemas.FGame.FTeam.Vector()); }
   public mainServer.schemas.FGame.FTeam.Vector teamsVector(mainServer.schemas.FGame.FTeam.Vector obj) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o), 4, bb) : null; }
-  public String city() { int o = __offset(8); return o != 0 ? __string(o + bb_pos) : null; }
-  public ByteBuffer cityAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
-  public ByteBuffer cityInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
-  public int host() { int o = __offset(10); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
-  public int clientsMax() { int o = __offset(12); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
 
   public static int createFGame(FlatBufferBuilder builder,
       int id,
-      int teamsOffset,
-      int cityOffset,
-      int host,
-      int clientsMax) {
-    builder.startTable(5);
-    FGame.addClientsMax(builder, clientsMax);
-    FGame.addHost(builder, host);
-    FGame.addCity(builder, cityOffset);
+      int teamsOffset) {
+    builder.startTable(2);
     FGame.addTeams(builder, teamsOffset);
     FGame.addId(builder, id);
     return FGame.endFGame(builder);
   }
 
-  public static void startFGame(FlatBufferBuilder builder) { builder.startTable(5); }
+  public static void startFGame(FlatBufferBuilder builder) { builder.startTable(2); }
   public static void addId(FlatBufferBuilder builder, int id) { builder.addInt(0, id, 0); }
   public static void addTeams(FlatBufferBuilder builder, int teamsOffset) { builder.addOffset(1, teamsOffset, 0); }
   public static int createTeamsVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
   public static void startTeamsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
-  public static void addCity(FlatBufferBuilder builder, int cityOffset) { builder.addOffset(2, cityOffset, 0); }
-  public static void addHost(FlatBufferBuilder builder, int host) { builder.addInt(3, host, 0); }
-  public static void addClientsMax(FlatBufferBuilder builder, int clientsMax) { builder.addInt(4, clientsMax, 0); }
   public static int endFGame(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;

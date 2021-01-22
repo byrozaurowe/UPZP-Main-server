@@ -64,6 +64,8 @@ public class Serialization {
                 return serializeWaitingRoomsList(data);
             case 9:
                 return serializeGameStarted(data);
+            case 10:
+                return serializeGame(data);
         }
         return null;
     }
@@ -142,7 +144,7 @@ public class Serialization {
                     break;
                 case Pedestrian:vehicleType = FVehicleType.Pedestrian;
             }
-            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
+            int serializedVehicle = mainServer.schemas.FWaitingRoom.FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
             int serializedName = builder.createString(client.getName());
             int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
             serializedClientTab.add(serializedClient);
@@ -165,7 +167,7 @@ public class Serialization {
                     break;
                 case Pedestrian:vehicleType = FVehicleType.Pedestrian;
             }
-            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
+            int serializedVehicle = mainServer.schemas.FWaitingRoom.FVehicle.createFVehicle(builder, vehicleType, client.getVehicle().getVelocity());
             int serializedName = builder.createString(client.getName());
             int serializedClient = FClient.createFClient(builder, serializedName, client.getId(), serializedVehicle);
             serializedClientTab.add(serializedClient);
@@ -188,6 +190,67 @@ public class Serialization {
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax());
         int serializedRoom = mainServer.schemas.FWaitingRoom.FWaitingRoom.endFWaitingRoom(builder);
+        builder.finish((serializedRoom));
+        return builder.sizedByteArray();
+    }
+
+    private static byte[] serializeGame(Object data) {
+        WaitingRoom room = (WaitingRoom)data;
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        int[] serializedTeam = new int[2];
+        ArrayList<Integer> serializedClientTab = new ArrayList<>();
+        for (Client client : room.getClients(1)) {
+            byte vehicleType = 0;
+            switch (client.getVehicle().getVehicleType()) {
+                case Car: vehicleType = mainServer.schemas.FGame.FVehicleType.Car;
+                    break;
+                case Cyclist: vehicleType = mainServer.schemas.FGame.FVehicleType.Cyclist;
+                    break;
+                case Pedestrian:vehicleType = mainServer.schemas.FGame.FVehicleType.Pedestrian;
+            }
+            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType);
+            int serializedName = builder.createString(client.getName());
+            int serializedIpAddress = builder.createString(client.getIpAddress().getHostAddress());
+            int serializedClient = mainServer.schemas.FGame.FClient.createFClient(builder, serializedName, client.getId(), serializedIpAddress, client.getSocket().getPort(), serializedVehicle);
+            serializedClientTab.add(serializedClient);
+        }
+        int[] clientTab = new int [serializedClientTab.size()];
+        for (int i = 0; i < serializedClientTab.size(); i++) {
+            clientTab[i] = serializedClientTab.get(i);
+        }
+        int b = mainServer.schemas.FGame.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FGame.FTeam.startFTeam(builder);
+        mainServer.schemas.FGame.FTeam.addClients(builder, b);
+        serializedTeam[0] = FTeam.endFTeam(builder);
+        serializedClientTab = new ArrayList<>();
+        for (Client client : room.getClients(2)) {
+            byte vehicleType = 0;
+            switch (client.getVehicle().getVehicleType()) {
+                case Car: vehicleType = mainServer.schemas.FGame.FVehicleType.Car;
+                    break;
+                case Cyclist: vehicleType = mainServer.schemas.FGame.FVehicleType.Cyclist;
+                    break;
+                case Pedestrian:vehicleType = mainServer.schemas.FGame.FVehicleType.Pedestrian;
+            }
+            int serializedVehicle = FVehicle.createFVehicle(builder, vehicleType);
+            int serializedName = builder.createString(client.getName());
+            int serializedIpAddress = builder.createString(client.getIpAddress().getHostAddress());
+            int serializedClient = mainServer.schemas.FGame.FClient.createFClient(builder, serializedName, client.getId(), serializedIpAddress, client.getSocket().getPort(), serializedVehicle);
+            serializedClientTab.add(serializedClient);
+        }
+        clientTab = new int [serializedClientTab.size()];
+        for (int i = 0; i < serializedClientTab.size(); i++) {
+            clientTab[i] = serializedClientTab.get(i);
+        }
+        b = mainServer.schemas.FGame.FTeam.createClientsVector(builder, clientTab);
+        mainServer.schemas.FGame.FTeam.startFTeam(builder);
+        mainServer.schemas.FGame.FTeam.addClients(builder, b);
+        serializedTeam[1] = FTeam.endFTeam(builder);
+        mainServer.schemas.FGame.FGame.startFGame(builder);
+        mainServer.schemas.FGame.FGame.addId(builder, room.getId());
+        int serializedTeamsVector = mainServer.schemas.FGame.FGame.createTeamsVector(builder, serializedTeam);
+        mainServer.schemas.FGame.FGame.addTeams(builder, serializedTeamsVector);
+        int serializedRoom = mainServer.schemas.FGame.FGame.endFGame(builder);
         builder.finish((serializedRoom));
         return builder.sizedByteArray();
     }

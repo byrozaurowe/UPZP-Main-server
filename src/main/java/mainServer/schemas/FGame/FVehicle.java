@@ -16,20 +16,16 @@ public final class FVehicle extends Table {
   public FVehicle __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public byte vehicleType() { int o = __offset(4); return o != 0 ? bb.get(o + bb_pos) : 0; }
-  public int velocity() { int o = __offset(6); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
 
   public static int createFVehicle(FlatBufferBuilder builder,
-      byte vehicleType,
-      int velocity) {
-    builder.startTable(2);
-    FVehicle.addVelocity(builder, velocity);
+      byte vehicleType) {
+    builder.startTable(1);
     FVehicle.addVehicleType(builder, vehicleType);
     return FVehicle.endFVehicle(builder);
   }
 
-  public static void startFVehicle(FlatBufferBuilder builder) { builder.startTable(2); }
+  public static void startFVehicle(FlatBufferBuilder builder) { builder.startTable(1); }
   public static void addVehicleType(FlatBufferBuilder builder, byte vehicleType) { builder.addByte(0, vehicleType, 0); }
-  public static void addVelocity(FlatBufferBuilder builder, int velocity) { builder.addInt(1, velocity, 0); }
   public static int endFVehicle(FlatBufferBuilder builder) {
     int o = builder.endTable();
     return o;

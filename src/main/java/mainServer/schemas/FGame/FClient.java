@@ -18,7 +18,7 @@ public final class FClient extends Table {
   public String name() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer nameAsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
   public ByteBuffer nameInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
-  public int id() { int o = __offset(6); return o != 0 ? bb.getInt(o + bb_pos) : 0; }
+  public long id() { int o = __offset(6); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
   public String ipAddress() { int o = __offset(8); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer ipAddressAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
   public ByteBuffer ipAddressInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
@@ -28,7 +28,7 @@ public final class FClient extends Table {
 
   public static int createFClient(FlatBufferBuilder builder,
       int nameOffset,
-      int id,
+      long id,
       int ipAddressOffset,
       int port,
       int vehicleOffset) {
@@ -43,7 +43,7 @@ public final class FClient extends Table {
 
   public static void startFClient(FlatBufferBuilder builder) { builder.startTable(5); }
   public static void addName(FlatBufferBuilder builder, int nameOffset) { builder.addOffset(0, nameOffset, 0); }
-  public static void addId(FlatBufferBuilder builder, int id) { builder.addInt(1, id, 0); }
+  public static void addId(FlatBufferBuilder builder, long id) { builder.addInt(1, (int)id, (int)0L); }
   public static void addIpAddress(FlatBufferBuilder builder, int ipAddressOffset) { builder.addOffset(2, ipAddressOffset, 0); }
   public static void addPort(FlatBufferBuilder builder, int port) { builder.addInt(3, port, 0); }
   public static void addVehicle(FlatBufferBuilder builder, int vehicleOffset) { builder.addOffset(4, vehicleOffset, 0); }
