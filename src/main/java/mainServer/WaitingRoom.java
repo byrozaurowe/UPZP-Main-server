@@ -1,17 +1,29 @@
 package mainServer;
 
+import mainServer.game.Game;
+import mainServer.game.GamesHandler;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class WaitingRoom {
-
+    /** Id pokoju */
     private int id;
+    /** Obiekt drużyny pierwszej */
     private Team team1;
+    /** Obiekt drużyny drugiej */
     private Team team2;
+    /** Nazwa mapy */
     private String city;
-    private Chat chat;
+    /** Gracz, który jest założycielem gry */
     private Client host;
+    /** Max liczba osób w drużynie */
+    private int clientsMax;
+    /** Czy gra jest rozpoczęta */
+    private boolean status;
+
+
 
     public void setId(int id) {
         this.id = id;
@@ -25,9 +37,6 @@ public class WaitingRoom {
         this.status = status;
     }
 
-    private int clientsMax;
-    private boolean status;
-
     public int getId() { return id; }
     public Team[] getTeams() { Team[] teams = new Team[]{team1, team2}; return teams; }
     public String getCity() { return city; }
@@ -36,6 +45,14 @@ public class WaitingRoom {
     public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
     public int getClientsMax() { return clientsMax; }
     public boolean getStatus() { return status; }
+    public Game game;
+
+    public int getUdpPort() {
+        if(game != null) {
+            return game.getUdpPort();
+        }
+        return -1;
+    }
 
     public ArrayList<Client> getClients(int team) {
         if (team == 1) {
@@ -78,7 +95,7 @@ public class WaitingRoom {
      */
     public boolean joinTeam(Client client) {
         client.enterWaitingRoom();
-        if (team1.clientsSize() <= team2.clientsSize()) {
+        if(team1.clientsSize() <= team2.clientsSize()) {
             if (team1.joinTeam(client)) {
                 return true;
             }
@@ -87,7 +104,7 @@ public class WaitingRoom {
             }
         }
         else {
-            if (team2.joinTeam(client)) {
+            if(team2.joinTeam(client)) {
                 return true;
             }
             else {
@@ -96,8 +113,32 @@ public class WaitingRoom {
         }
     }
 
-    public boolean canStart() {
+    private boolean canStart() {
         return team1.clientsSize() >= clientsMax/2 && team2.clientsSize() >= clientsMax/2;
+    }
+
+    boolean startGame() {
+        if(canStart()) {
+            game = GamesHandler.newGame(city, id);
+            for (Team t : getTeams()) {
+                for (Client c : t.clients) {
+                    c.enterGame();
+                }
+            }
+            status = true;
+            return true;
+        }
+        return false;
+    }
+
+    void endGame() {
+        for(Team t : getTeams()) {
+            for(Client c : t.clients) {
+                c.enterWaitingRoomList();
+            }
+        }
+        game = null;
+        status = false;
     }
 
     public boolean isHost(Client client) {
@@ -110,12 +151,12 @@ public class WaitingRoom {
      */
     public boolean changeHost() {
         Client h = team1.getNewHost(host);
-        if (h != null) {
+        if(h != null) {
             host = team1.getNewHost(host);
             return true;
         }
         h = team2.getNewHost(host);
-        if (h != null) {
+        if(h != null) {
             host = team2.getNewHost(host);
             return true;
         }
@@ -139,24 +180,23 @@ public class WaitingRoom {
     }
 
     public Team getTeamByClient(Client client) {
-        if (team1.isClientInTeam(client)) return team1;
-        if (team2.isClientInTeam(client)) return team2;
+        if(team1.isClientInTeam(client)) return team1;
+        if(team2.isClientInTeam(client)) return team2;
         return null;
     }
 
     /** Konstruktor Waiting roomu (poczekalni)
      * @param city miasto, gdzie odbędzie się rozgrywka
      * @param host klient, który jest administratorem gry
-     * @param clientsMax maksymalna liczba graczy w grze
+     * @param clientsMax maksymalna liczba graczy w drużynie
      */
     public WaitingRoom(String city, Client host, int clientsMax) {
         this.city = city;
         this.host = host;
         this.clientsMax = clientsMax;
 
-        team1 = new Team();
-        team2 = new Team();
-        chat = new Chat();
+        team1 = new Team(clientsMax);
+        team2 = new Team(clientsMax);
         status = false;
     }
 }

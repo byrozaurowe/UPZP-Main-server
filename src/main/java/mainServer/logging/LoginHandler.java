@@ -16,7 +16,6 @@ public class LoginHandler {
     public static boolean verifyIdentity(LoggingClient logClient) throws SQLException, IOException {
         String name = logClient.getName();
         String password = logClient.getPassword();
-        InetAddress ip = logClient.getIpAddress();
         Object o = DatabaseHandler.getInstance().loggIn(name, password);
         if(o.toString().equals("1")) {
             signIn(logClient);

@@ -32,6 +32,9 @@ public class Client {
     private Vehicle vehicle;
 
     public void setVehicle(Vehicle vehicle) {
+        if(getVehicle() != null) {
+            this.vehicle.free = true;
+        }
         this.vehicle = vehicle;
     }
 

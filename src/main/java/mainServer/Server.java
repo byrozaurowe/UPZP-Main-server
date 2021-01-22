@@ -12,22 +12,47 @@ import java.util.Set;
 /** Klasa główna serwera */
 public class Server implements Runnable {
     private static Selector selector = null;
+    public static String serverIp;
     public ClientsCoordinator clientsCoordinator;
     public WaitingRoomsCoordinator waitingRoomsCoordinator;
+
+    public String getIp() {
+        return serverIp;
+    }
+
+    private void checkExternalIp() throws IOException {
+        java.net.URL URL = new java.net.URL("http://checkip.amazonaws.com");
+        java.net.HttpURLConnection Conn = (HttpURLConnection)URL.openConnection();
+        java.io.InputStreamReader Isr = new java.io.InputStreamReader(Conn.getInputStream());
+        java.io.BufferedReader Br = new java.io.BufferedReader(Isr);
+        serverIp = Br.readLine();
+        Conn.disconnect();
+        Br.close();
+        Isr.close();
+    }
+
     public  void run() {
         clientsCoordinator = new ClientsCoordinator();
         waitingRoomsCoordinator = new WaitingRoomsCoordinator();
-        //DatabaseHandler.getInstance();
+        DatabaseHandler.getInstance();
         ServerSocketChannel socket;
+        try {
+            checkExternalIp();
+        } catch (IOException e) {
+            System.out.println("Nie mogłem odczytać swojego ip");
+        }
         try {
             selector = Selector.open();
             // We have to set connection host, port and non-blocking mode
             socket = ServerSocketChannel.open();
+
             ServerSocket serverSocket = socket.socket();
             serverSocket.bind(new InetSocketAddress(4444));
+           
             socket.configureBlocking(false);
             int ops = socket.validOps();
             socket.register(selector, ops, null);
+            System.out.println("Wewnętrzne IP: " + InetAddress.getLocalHost() + "\nZewnętrzne IP: " + serverIp + "\nPORT: " + "4444");
         } catch (IOException ioException) {
             ioException.printStackTrace();
             return;
@@ -56,13 +81,6 @@ public class Server implements Runnable {
                 selector.selectedKeys().clear();
             }
         }
-    }
-
-    void test() throws IOException, SQLException {
-        WaitingRoom w = new WaitingRoom("Wrocław", new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket()), 20);
-        waitingRoomsCoordinator.addWaitingRoom(w);
-        WaitingRoom wr = new WaitingRoom("Wrochrław", new Client("Worjtek", InetAddress.getByName("127.0.1.1"), new Socket()), 20);
-        waitingRoomsCoordinator.addWaitingRoom(wr);
     }
 
     /** Obsługa próby podłączenia klienta pod serwer */

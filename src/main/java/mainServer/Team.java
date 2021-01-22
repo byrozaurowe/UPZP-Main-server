@@ -5,16 +5,18 @@ import java.util.*;
 public class Team {
     ArrayList<Client> clients;
     Vehicle[] vehicles;
+    private int maxSize;
 
-    public Team () {
+    public Team(int maxSize) {
         clients = new ArrayList<>();
+        this.maxSize = maxSize;
         initializeVehicles();
     }
 
     private void initializeVehicles() {
-        int cars = 10;
-        int bikes = 10;
-        int pedestrians = 10;
+        int cars = maxSize/3;
+        int bikes = maxSize/3 + maxSize%3;
+        int pedestrians = maxSize/3;
         vehicles = new Vehicle[cars+bikes+pedestrians];
         for(int i = 0; i < cars; i++) {
             vehicles[i] = new Vehicle(Vehicle.VehicleType.Car, 40);
@@ -28,7 +30,7 @@ public class Team {
     }
 
     boolean joinTeam(Client client) {
-        if (clients.size() < 20) {
+        if (clients.size() < maxSize) {
             clients.add(client);
             List<Vehicle> vehicleList = Arrays.asList(vehicles);
             Collections.shuffle(vehicleList);
@@ -73,6 +75,10 @@ public class Team {
         return clients.size();
     }
 
+    /** Szuka nowego admina gry
+     * @param host nowy admin gry
+     * @return nowy admin gry typu klient
+     */
     Client getNewHost(Client host) {
         for(Client c : clients) {
             if(c != null && c != host)

@@ -1,23 +1,22 @@
 package mainServer;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import mainServer.game.GamesHandler;
 import mainServer.schemas.FChooseWaitingRoom.FChooseWaitingRoom;
 import mainServer.schemas.FError.FError;
 import mainServer.schemas.FGame.FTeam;
 import mainServer.schemas.FGame.FVehicle;
+import mainServer.schemas.FGameStarted.FGameStarted;
 import mainServer.schemas.FLoggingClient.FLoggingClient;
 import mainServer.schemas.FNewWaitingRoom.FNewWaitingRoom;
 import mainServer.schemas.FWaitingRoom.FClient;
 import mainServer.schemas.FWaitingRoom.FVehicleType;
 import mainServer.schemas.FWaitingRoomsList.FWaitingRoom;
 import mainServer.schemas.FWaitingRoomsList.FWaitingRoomsList;
-import mainServer.schemas.Tester;
-import mainServer.schemas.Vec3;
 
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 /** Klasa zajmująca się serializacją i deserializacją obiektów z pakietów */
 public class Serialization {
@@ -59,10 +58,12 @@ public class Serialization {
                 return serializeError(data);
             case 2:
                 break;
-            case 7:
-                return serializeWaitingRoomsList(data);
             case 4:
                 return serializeWaitingRoom(data);
+            case 7:
+                return serializeWaitingRoomsList(data);
+            case 9:
+                return serializeGameStarted(data);
         }
         return null;
     }
@@ -119,9 +120,14 @@ public class Serialization {
         return builder.sizedByteArray();
     }
 
-    public static void main(String[] args) {
-
+    private static byte[] serializeGameStarted(Object room) {
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        int ip = builder.createString(Main.server.getIp());
+        int test = FGameStarted.createFGameStarted(builder, ip, ((WaitingRoom) room).getUdpPort());
+        builder.finish(test);
+        return builder.sizedByteArray();
     }
+
     private static byte[] serializeWaitingRoom(Object data) {
         WaitingRoom room = (WaitingRoom)data;
         FlatBufferBuilder builder = new FlatBufferBuilder(0);
@@ -197,7 +203,11 @@ public class Serialization {
         String city = newWaitingRoom.city();
         int clientsMax = newWaitingRoom.clientsMax();
         Client host = Main.server.clientsCoordinator.findClientBySocket(s);
-        return new WaitingRoom(city, host, clientsMax);
+        if(GamesHandler.cities.contains(city)) {
+            return new WaitingRoom(city, host, clientsMax);
+        } else {
+            return false;
+        }
     }
 
     private static Object deserializeVehicle(byte[] data, Socket s) {

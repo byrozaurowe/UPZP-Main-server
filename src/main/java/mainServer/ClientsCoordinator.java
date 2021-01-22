@@ -148,7 +148,7 @@ public class ClientsCoordinator {
     public void disconnectLoggClient(Socket s) {
         try {
             LoggingClient client = findLogClientBySocket(s);
-            System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
+            System.out.println("Rozłączono lc " + client.getName() +": " + client.getSocket());
             client.getSocket().close();
             loggingClients.remove(client);
         } catch (NullPointerException | IOException e) {

@@ -1,5 +1,7 @@
 package mainServer;
 
+import mainServer.game.Game;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -33,6 +35,7 @@ public class PacketHandler {
                         case (byte)0:
                             startGame(c);
                             Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                            break;
                         case (byte)1:
                             WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
                             room.leaveWaitingRoom(c);
@@ -42,11 +45,16 @@ public class PacketHandler {
                     }
                     break;
                 case 5:
-                    WaitingRoom room = (WaitingRoom) o;
-                    Main.server.waitingRoomsCoordinator.newWaitingRoom(room);
-                    room.joinTeam(c);
-                    room.sendToPlayersInRoom(buildWaitingRoom(room));
-                    Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                    if(o instanceof WaitingRoom) {
+                        WaitingRoom room = (WaitingRoom) o;
+                        room.joinTeam(c);
+                        Main.server.waitingRoomsCoordinator.newWaitingRoom(room);
+                        room.sendToPlayersInRoom(buildWaitingRoom(room));
+                        Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                    }
+                    else {
+                        toSend = buildError("Nie można utworzyć gry w takim mieście!");
+                    }
                     break;
                 case 6:
                     if(c.getClientStatus() == ClientStatus.WAITING_ROOM_LIST) {
@@ -95,10 +103,15 @@ public class PacketHandler {
         return Header.encode((byte)4, serialized, true);
     }
 
+    private static byte[] buildGameStarted(WaitingRoom room) {
+        byte[] serialized = Serialization.serialize(room, 9);
+        return Header.encode((byte)9, serialized, true);
+    }
+
     private static void startGame(Client c) throws IOException {
         WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
-        if(room.canStart()) {
-            c.enterGame();
+        if(room.startGame()) {
+            room.sendToPlayersInRoom(buildGameStarted(room));
         }
         else {
             c.getSocket().getChannel().write(ByteBuffer.wrap(buildError("Za mało osób, żeby wystartować grę!")));
