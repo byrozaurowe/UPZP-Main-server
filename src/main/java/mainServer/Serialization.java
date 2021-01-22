@@ -250,8 +250,8 @@ public class Serialization {
         mainServer.schemas.FGame.FGame.addId(builder, room.getId());
         int serializedTeamsVector = mainServer.schemas.FGame.FGame.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FGame.FGame.addTeams(builder, serializedTeamsVector);
-        int serializedRoom = mainServer.schemas.FGame.FGame.endFGame(builder);
-        builder.finish((serializedRoom));
+        int serializedGame = mainServer.schemas.FGame.FGame.endFGame(builder);
+        builder.finish((serializedGame));
         return builder.sizedByteArray();
     }
 
@@ -304,11 +304,6 @@ public class Serialization {
     private static Object deserializeMessage(byte[] data, Socket s) {
         mainServer.schemas.FMessage.FMessage message = mainServer.schemas.FMessage.FMessage.getRootAsFMessage(ByteBuffer.wrap(data));
         return message.messageType();
-    }
-
-    private static Object deserializeStartGame(byte[] data, Socket s) {
-        //tutaj trzeba wystartować nową grę, pobrać od podprocesu port i ip i wysłać je do wszystkich użytkowników w waiting roomie
-        return null;
     }
 
 }

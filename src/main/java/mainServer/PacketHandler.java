@@ -1,7 +1,5 @@
 package mainServer;
 
-import mainServer.game.Game;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -22,6 +20,8 @@ public class PacketHandler {
         Client c = Main.server.clientsCoordinator.findClientBySocket(client.socket());
         if(o != null) {
             switch((int) returned.version) {
+                case 1:
+                    break;
                 case 2:
                     if(o instanceof Boolean && !(boolean) o) {
                         toSend = buildError("Błędny login lub hasło");
@@ -76,7 +76,7 @@ public class PacketHandler {
                         WaitingRoom r = (WaitingRoom) o;
                         r.sendToPlayersInRoom(buildWaitingRoom(r));
                     }
-                    else toSend = buildError("Nie udało się zmienić pojazdu!");
+                    else toSend = buildError("vehicle not changed");
             }
         }
         if(toSend != null)
@@ -112,7 +112,7 @@ public class PacketHandler {
         WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
         if(room.startGame()) {
             room.sendToPlayersInRoom(buildGameStarted(room));
-            buildGame(room);
+            buildGame(room); // to trzeba wysłać do podprocesu
         }
         else {
             c.getSocket().getChannel().write(ByteBuffer.wrap(buildError("Za mało osób, żeby wystartować grę!")));
@@ -121,6 +121,6 @@ public class PacketHandler {
 
     private static byte[] buildGame(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 10);
-        return null;
+        return Header.encode((byte)10, serialized, true);
     }
 }
