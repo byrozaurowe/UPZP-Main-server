@@ -1,9 +1,11 @@
 package mainServer;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/** Klasa obiektu zajmującego się koordynowaniem waiting roomów */
 public class WaitingRoomsCoordinator {
     /** Lista waiting roomów */
     private ArrayList<WaitingRoom> waitingRooms;
@@ -44,23 +46,15 @@ public class WaitingRoomsCoordinator {
         Main.server.clientsCoordinator.sendToAllWaitingRoomList();
     }
 
-    /** Dodanie waiting roomu na początku działania serwera
-     * @param waitingRoom pokój do dodania
+    /** Zwraca listę waiting roomów
+     * @return lista waiting roomów
      */
-    public void addWaitingRoom(WaitingRoom waitingRoom) throws SQLException {
-        //int id = DatabaseHandler.getInstance().getFreeGameId();
-        int id = 1;
-        if(waitingRooms.isEmpty()) {
-            waitingRoom.setId(1);
-        }
-        else {
-            waitingRoom.setId(id + 1);
-        }
-        waitingRooms.add(waitingRoom);
-    }
-
     public ArrayList<WaitingRoom> getWaitingRooms() { return waitingRooms; }
 
+    /** Zwraca waiting room
+     * @param roomId id żądanego waiting roomu
+     * @return żądany waiting room
+     */
     public WaitingRoom getWaitingRoom(int roomId) {
         for (WaitingRoom room : waitingRooms) {
             if (room.getId() == roomId) return room;
@@ -68,9 +62,24 @@ public class WaitingRoomsCoordinator {
         return null;
     }
 
+    /** Zwraca waiting room, w którym jest podany klient
+     * @param client klient, którego pokoju szukamy
+     * @return szukany pokój
+     */
     public WaitingRoom getWaitingRoomByClient(Client client) {
         for (WaitingRoom room : waitingRooms) {
             if (room.isClientInRoom(client)) return room;
+        }
+        return null;
+    }
+
+    /** Szuka waiting roomu na podstawie socketa
+     * @param s socket do komunikacji z grą
+     * @return szukany pokój
+     */
+    public WaitingRoom getWaitingRoomBySocket(Socket s) {
+        for (WaitingRoom room : waitingRooms) {
+            if (room.getGameSocket() == s) return room;
         }
         return null;
     }

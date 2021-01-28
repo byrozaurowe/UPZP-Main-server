@@ -22,4 +22,20 @@ public class City {
         this.radius = radius;
         this.cityString = cityString;
     }
+
+    double getLatitude() {
+        return this.latitude;
+    }
+
+    double getLongitude() {
+        return this.longitude;
+    }
+
+    int getRadius() {
+        return this.radius;
+    }
+
+    String getCityString() {
+        return cityString;
+    }
 }

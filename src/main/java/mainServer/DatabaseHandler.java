@@ -1,6 +1,9 @@
 package mainServer;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,9 +14,9 @@ import java.util.Properties;
 public class DatabaseHandler {
 
     // JDBC URL, username and password of MySQL server
-    private static final String url = "jdbc:mysql://34.107.65.104:3306/pz";
-    private static final String user = "backend";
-    private static final String password = "backendpz2020";
+    private static final String url = "jdbc:mysql://35.246.226.222:3306/Website";
+    private static final String user = "dev";
+    private static final String password = "pz2021project";
 
     private static DatabaseHandler DATABASE_HANDLER;
 
@@ -30,7 +33,6 @@ public class DatabaseHandler {
             try {
                 Properties props = new Properties();
                 // opening database connection to MySQL server*/
-                props.clear();
                 props.setProperty("user", user);
                 props.setProperty("password", password);
                 props.setProperty("useSSL", "true");
@@ -38,17 +40,23 @@ public class DatabaseHandler {
                 props.setProperty("verifyServerCertificate", "true");
 
                 System.setProperty("javax.net.ssl.trustStoreType", "JKS");
-                System.setProperty("javax.net.ssl.trustStore", "src\\main\\resources\\truststore.jks");
+                URL res = getClass().getClassLoader().getResource("truststore.jks");
+                File file = Paths.get(res.toURI()).toFile();
+                String absolutePath = file.getAbsolutePath();
+                System.setProperty("javax.net.ssl.trustStore", absolutePath);
                 //System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
                 System.setProperty("javax.net.ssl.keyStoreType", "JKS");
-                System.setProperty("javax.net.ssl.keyStore", "src\\main\\resources\\keystore.jks");
+                res = getClass().getClassLoader().getResource("keystore.jks");
+                file = Paths.get(res.toURI()).toFile();
+                absolutePath = file.getAbsolutePath();
+                System.setProperty("javax.net.ssl.keyStore", absolutePath);
                 System.setProperty("javax.net.ssl.keyStorePassword", "password");
 
                 con = DriverManager.getConnection(url, props);
                 // getting Statement object to execute query
                 stmt = con.createStatement();
-            } catch (SQLException sqlEx) {
+            } catch (SQLException | URISyntaxException sqlEx) {
                 sqlEx.printStackTrace();
             }
         }
@@ -77,7 +85,7 @@ public class DatabaseHandler {
         //String account_login_1 = "zxcv";
         //String account_pass_1 = "123456";
 
-        String query_loggin = "SELECT count(id) FROM user_details WHERE login='" + login + "'AND password='" + haslo + "'";
+        String query_loggin = "SELECT Login_in_app('" + login + "', '" + haslo +"')";
         ResultSet rs = stmt.executeQuery(query_loggin);
         rs.next();
         return rs.getObject(1);
@@ -94,7 +102,7 @@ public class DatabaseHandler {
 
     /** Funkcja czytająca z bazy id wolnej gry */
     public int getFreeGameId() throws SQLException {
-        String query_loggin = "SELECT * FROM stat_game ORDER BY id DESC LIMIT 1";
+        String query_loggin = "SELECT * FROM stat_map_game ORDER BY id DESC LIMIT 1";
         ResultSet rs = stmt.executeQuery(query_loggin);
         rs.next();
         return (int) rs.getObject(1);

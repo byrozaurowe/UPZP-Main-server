@@ -13,14 +13,24 @@ class WrongPacketException extends Exception {
 
 /** Klasa odpowiedzialna za kodowanie i odkodowywanie pakietów */
 public class Header {
+    /** Sekwencja rozpoczynająca header */
     private static final byte[] BEGINSEQ = CRC.hexStringToLittleEndianByteArray("ABDA");
+    /** Jedynka jako bajt */
     private static byte res1 = (byte)1;
+    /** Zero jako bajt */
     private static byte res = (byte)0;
 
+    /** Klasa return*/
     static class Return {
+        /** Zserializowany obiekt */
         byte[] bytes;
+        /** Wersja schematu obiektu */
         byte version;
 
+        /** Konstruktor
+         * @param bytes zserializowany obiekt
+         * @param version wersja schematu obiektu
+         */
         Return(byte[] bytes, byte version) {
             this.bytes = bytes;
             this.version = version;
@@ -64,7 +74,7 @@ public class Header {
                 0, headerLength(isChecksum) - 3));
 
         if(!Arrays.equals(calculatedHeaderChecksum, subArray(header,
-                14, headerLength(isChecksum) - 1))) {
+                headerLength(isChecksum) - 2, headerLength(isChecksum) - 1))) {
             throw new WrongPacketException("Wrong header checksum");
         }
         return new Return(data, version);
@@ -117,8 +127,17 @@ public class Header {
         return result;
     }
 
+    /** Zwraca długość headera w zależności od tego czy załączono checksumę
+     * @param isChecksum czy załączono checksumę?
+     * @return oczekiwana długość headera
+     */
     private static int headerLength(boolean isChecksum) { return isChecksum ? 16 : 12; }
 
+    /** Zamienia int na bajt w little endian
+     * @param numer numer w formacie int
+     * @param sizeInByte docelowy rozmiar w bajtach
+     * @return bajt w little endian
+     */
     private static byte[] intToLittleEndian(int numer, int sizeInByte) {
         ByteBuffer bb = ByteBuffer.allocate(sizeInByte);
         bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -126,15 +145,25 @@ public class Header {
         return bb.array();
     }
 
+    /** Dodaje wszystkie elementy tablicy tab do listy list
+     * @param tab tablica
+     * @param list docelowa lista
+     */
     private static void addAll(byte[] tab, ArrayList<Byte> list) {
         for (byte b : tab) {
             list.add(b);
         }
     }
 
+    /** Zwraca podtablicę
+     * @param array tablica początkowa
+     * @param beg początkowy indeks w tablicy
+     * @param end końcowy indeks w tablicy
+     * @return podtablica
+     */
     private static byte[] subArray(byte[] array, int beg, int end) {
         byte[] subarray = new byte[end - beg + 1];
-        if (subarray.length >= 0) System.arraycopy(array, beg + 0, subarray, 0, subarray.length);
+        if (subarray.length >= 0) System.arraycopy(array, beg, subarray, 0, subarray.length);
         return subarray;
     }
 }

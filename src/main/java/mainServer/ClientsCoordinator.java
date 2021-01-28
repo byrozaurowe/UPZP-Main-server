@@ -23,14 +23,6 @@ public class ClientsCoordinator {
         loggingClients = new ArrayList<>();
     }
 
-    /** Funkcja wysyłająca pakiet do klienta
-     * @param s socket klienta, do którego chcemy wysłać pakiet
-     * @param toSend pakiet do wysłania
-     */
-    public void sendTo(Socket s, byte[] toSend) throws IOException {
-        s.getChannel().write(ByteBuffer.wrap(toSend));
-    }
-
     /** Funkcja wysyłająca pakiety do klientów na liście */
     public void sendToAllWaitingRoomList() throws IOException {
         byte[] toSend = PacketHandler.buildWaitingRoomsList();
@@ -79,15 +71,10 @@ public class ClientsCoordinator {
         System.out.println("Połączono do " + s);
     }
 
-    Client findClientByName(String name) {
-        for(Client client: clients) {
-            if(client.getName().equals(name)) {
-                return client;
-            }
-        }
-        return null;
-    }
-
+    /** Znajduje obiekt logging client na podstawie socketa
+     * @param s socket
+     * @return szukany logging client
+     */
     private LoggingClient findLogClientBySocket(Socket s) {
         for(LoggingClient client: loggingClients) {
             if(client.getSocket() == s) {
@@ -97,6 +84,10 @@ public class ClientsCoordinator {
         return null;
     }
 
+    /** Znajduje obiekt klient na podstawie socketa
+     * @param s socket
+     * @return szukany klient
+     */
     public Client findClientBySocket(Socket s) {
         for(Client client: clients) {
             if(client.getSocket() == s) {
@@ -104,27 +95,6 @@ public class ClientsCoordinator {
             }
         }
         return null;
-    }
-
-    public Client findClientById(int id) {
-        for (Client client : clients) {
-            if (client.getId() == id) {
-                return client;
-            }
-        }
-        return null;
-    }
-
-    public void disconnect(String name) throws IOException {
-        try {
-            Client client = findClientByName(name);
-            System.out.println("Rozłączono " + name +": " + client.getSocket());
-
-            client.getSocket().close();
-            clients.remove(client);
-        } catch (NullPointerException e) {
-            System.out.println("Disconnect Client error " + e.getMessage());
-        }
     }
 
     /** Metoda rozłączająca klienta

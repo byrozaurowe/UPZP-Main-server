@@ -4,9 +4,11 @@ import mainServer.game.Game;
 import mainServer.game.GamesHandler;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+/** Obiekt pokój */
 public class WaitingRoom {
     /** Id pokoju */
     private int id;
@@ -22,31 +24,75 @@ public class WaitingRoom {
     private int clientsMax;
     /** Czy gra jest rozpoczęta */
     private boolean status;
+    /** Obiekt rozpoczętej gry */
+    public Game game;
 
-
-
+    /** Ustawia id pokoju
+     * @param id nowe id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setClientsMax(int clientsMax) {
-        this.clientsMax = clientsMax;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
+    /** Zwraca id pokoju
+     * @return id pokoju
+     */
     public int getId() { return id; }
-    public Team[] getTeams() { Team[] teams = new Team[]{team1, team2}; return teams; }
-    public String getCity() { return city; }
-    public int getHost() { return host.getId(); }
-    public String getHostName() { return host.getName(); }
-    public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
-    public int getClientsMax() { return clientsMax; }
-    public boolean getStatus() { return status; }
-    public Game game;
 
+    /** Zwraca tablicę drużyn
+     * @return dwuelementowa tablica drużyn
+     */
+    public Team[] getTeams() {
+        return new Team[]{ team1, team2 };
+    }
+
+    /** Zwraca string nazwy mapy
+     * @return nazwa mapy w formie stringa
+     */
+    public String getCity() { return city; }
+
+    /** Zwraca id osoby, która jest hostem
+     * @return id hosta
+     */
+    public int getHost() { return host.getId(); }
+
+    /** Zwraca nazwę hosta
+     * @return nazwa hosta w formie stringa
+     */
+    public String getHostName() { return host.getName(); }
+
+    /** Zwraca liczbę graczy w pokoju
+     * @return liczba graczy w pokoju jako int
+     */
+    public int getClientsLoggedVal() { return team1.clientsSize() + team2.clientsSize(); }
+
+    /** Zwraca maksymalną liczbę graczy w drużynie
+     * @return maksymalna liczba graczy w drużynie jako int
+     */
+    public int getClientsMax() { return clientsMax; }
+
+    /** Status gry
+     * @return czy gra jest rozpoczęta czy nie?
+     */
+    public boolean getStatus() { return status; }
+
+    /** Zwraca socket podprocesu, który obsługuje grę
+     * @return socket
+     */
+    public Socket getGameSocket() {
+        return game.getSocket();
+    }
+
+    /** Ustawia socket podprocesu, który obsługuje grę
+     * @param s socket
+     */
+    public void setGameSocket(Socket s) {
+        game.setSocket(s);
+    }
+
+    /** Zwraca port UDP, na którym trwa gra
+     * @return port udp
+     */
     public int getUdpPort() {
         if(game != null) {
             return game.getUdpPort();
@@ -54,6 +100,10 @@ public class WaitingRoom {
         return -1;
     }
 
+    /** Zwraca klientów danej drużyny
+     * @param team drużyna jako 1 lub 2
+     * @return lista klientów
+     */
     public ArrayList<Client> getClients(int team) {
         if (team == 1) {
             return team1.getClients();
@@ -94,9 +144,8 @@ public class WaitingRoom {
      * @return czy się powiodło?
      */
     public boolean joinTeam(Client client) {
-        client.enterWaitingRoom();
         if(team1.clientsSize() <= team2.clientsSize()) {
-            if (team1.joinTeam(client)) {
+            if(team1.joinTeam(client)) {
                 return true;
             }
             else {
@@ -113,10 +162,16 @@ public class WaitingRoom {
         }
     }
 
+    /** Sprawdza, czy jest wystarczająco dużo osób, by rozpocząć grę
+     * @return True / False
+     */
     private boolean canStart() {
-        return team1.clientsSize() >= clientsMax/2 && team2.clientsSize() >= clientsMax/2;
+        return team1.clientsSize() >= Math.ceil(clientsMax/2) && team2.clientsSize() >= Math.ceil(clientsMax/2);
     }
 
+    /** Odpowiada za rozpoczęcie gry
+     * @return Udało się wystartować czy nie
+     */
     boolean startGame() {
         if(canStart()) {
             game = GamesHandler.newGame(city, id);
@@ -126,25 +181,36 @@ public class WaitingRoom {
                 }
             }
             status = true;
+            try {
+                game.runGame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
+
         }
         return false;
     }
 
-    void endGame() {
+    /** Odpowiada za zakończenie rozpoczętej gry */
+    public void endGame() {
         for(Team t : getTeams()) {
             for(Client c : t.clients) {
-                c.enterWaitingRoomList();
+                leaveWaitingRoom(c);
             }
         }
         game = null;
         status = false;
+        System.out.println("Gra ukończona, id: " + id);
     }
 
+    /** Sprawdza, czy klient jest hostem
+     * @param client klient, który jest sprawdzany
+     * @return True / False
+     */
     public boolean isHost(Client client) {
         return client == host;
     }
-
 
     /** Funkcja zmieniająca hosta
      * @return czy się powiodło?
@@ -175,10 +241,19 @@ public class WaitingRoom {
         }
     }
 
+    /** Sprawdza, czy klient jest w danym pokoju
+     * @param client klient
+     * @return True / False
+     */
     public boolean isClientInRoom (Client client) {
         return team1.isClientInTeam(client) || team2.isClientInTeam(client);
     }
 
+
+    /** Zwraca drużynę, do której należy klient
+     * @param client klient
+     * @return drużyna klienta
+     */
     public Team getTeamByClient(Client client) {
         if(team1.isClientInTeam(client)) return team1;
         if(team2.isClientInTeam(client)) return team2;

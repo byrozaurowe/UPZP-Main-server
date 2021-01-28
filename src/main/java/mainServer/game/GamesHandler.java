@@ -1,18 +1,19 @@
 package mainServer.game;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** Statyczna klasa tworząca nowe gry */
 public class GamesHandler {
 
+    /** Lista map */
     public static ArrayList<String> cities = new ArrayList<>(Arrays.asList(
             "Wrocław", "Nowy Jork", "Amsterdam", "Kopenhaga", "Helsinki"));
 
     /** Znajduje nowy port dla gry */
     private static int findNewPort(String connection, int gameId) {
         if(connection.equals("TCP")) {
-            return 1020 + gameId;
+            return 4445;
         }
         else {
             return 4000 + gameId;
@@ -31,7 +32,7 @@ public class GamesHandler {
         switch (cityName) {
             case "Wrocław":
                 city = new City(51.10000, 17.03333, 15, cityName);
-                return new Game(udp, tcp, 20, 10, city);
+                break;
             case "Nowy Jork":
                 city = new City(40.7142700, -74.0059700, 20, cityName);
                 break;
@@ -47,6 +48,6 @@ public class GamesHandler {
             default:
                 return null;
         }
-        return new Game(udp, tcp, 20, 10, city);
+        return new Game(udp, tcp, 20, 10, city, gameId);
     }
 }

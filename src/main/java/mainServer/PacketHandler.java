@@ -59,8 +59,12 @@ public class PacketHandler {
                 case 6:
                     if(c.getClientStatus() == ClientStatus.WAITING_ROOM_LIST) {
                         WaitingRoom wr = (WaitingRoom) o;
-                        wr.joinTeam(c);
-                        wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                        if(wr.joinTeam(c)) {
+                            wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                        }
+                        else {
+                            toSend = buildError("Wybrany pokój jest pełny!");
+                        }
                     } else {
                         toSend = buildError("Klient już dołączył do innej gry. Opuszczanie...");
                         client.write(ByteBuffer.wrap(toSend));
@@ -76,7 +80,20 @@ public class PacketHandler {
                         WaitingRoom r = (WaitingRoom) o;
                         r.sendToPlayersInRoom(buildWaitingRoom(r));
                     }
-                    else toSend = buildError("vehicle not changed");
+                    else toSend = buildError("Nie udało się zmienić pojazdu!");
+                    break;
+                case 11:
+                    if((Boolean) o) {
+                        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomBySocket(client.socket());
+                        room.endGame();
+                    }
+                    break;
+                case 12:
+                    int gameId = (int) o;
+                    WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoom(gameId);
+                    room.setGameSocket(client.socket());
+                    client.write(ByteBuffer.wrap(buildGame(gameId)));
+                    break;
             }
         }
         if(toSend != null)
@@ -92,34 +109,52 @@ public class PacketHandler {
         return Header.encode((byte)1, serialized, true);
     }
 
+    /** Buduje pakiet listy waiting roomów
+     * @return pakiet listy waiting roomów z headerem
+     */
     public static byte[] buildWaitingRoomsList() {
         ArrayList<WaitingRoom> list = Main.server.waitingRoomsCoordinator.getWaitingRooms();
         byte[] serialized = Serialization.serialize(list, 7);
         return Header.encode((byte)7, serialized, true);
     }
 
+    /** Buduje pakiet waiting roomu
+     * @param room pokój do wysłania
+     * @return pakiet waiting roomu z headerem
+     */
     private static byte[] buildWaitingRoom(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 4);
         return Header.encode((byte)4, serialized, true);
     }
 
+    /** Buduje game started
+     * @param room pokój w którym rozpoczyna się gra
+     * @return pakiet game started z headerem
+     */
     private static byte[] buildGameStarted(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 9);
         return Header.encode((byte)9, serialized, true);
     }
 
+    /** Rozpoczyna grę
+     * @param c host, który ją rozpoczyna
+     */
     private static void startGame(Client c) throws IOException {
         WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c);
         if(room.startGame()) {
             room.sendToPlayersInRoom(buildGameStarted(room));
-            buildGame(room); // to trzeba wysłać do podprocesu
         }
         else {
             c.getSocket().getChannel().write(ByteBuffer.wrap(buildError("Za mało osób, żeby wystartować grę!")));
         }
     }
 
-    private static byte[] buildGame(WaitingRoom room) {
+    /** Buduje pakiet z grą
+     * @param id id gry, która się rozpoczyna
+     * @return zserializowana gra z headerem
+     */
+    static byte[] buildGame(int id) {
+        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoom(id);
         byte[] serialized = Serialization.serialize(room, 10);
         return Header.encode((byte)10, serialized, true);
     }

@@ -6,6 +6,8 @@ import mainServer.schemas.FChooseWaitingRoom.FChooseWaitingRoom;
 import mainServer.schemas.FError.FError;
 import mainServer.schemas.FGame.FTeam;
 import mainServer.schemas.FGame.FVehicle;
+import mainServer.schemas.FGameEnded.FGameEnded;
+import mainServer.schemas.FGameId.FGameId;
 import mainServer.schemas.FGameStarted.FGameStarted;
 import mainServer.schemas.FLoggingClient.FLoggingClient;
 import mainServer.schemas.FNewWaitingRoom.FNewWaitingRoom;
@@ -25,7 +27,7 @@ public class Serialization {
      * @param data dane do deserializacji
      * @param version wersja schematu do użycia
      * @param s socket
-     * @return
+     * @return zdeserializowany obiekt
      */
      static Object deserialize(byte[] data, int version, Socket s) {
         switch(version) {
@@ -41,16 +43,23 @@ public class Serialization {
                 return deserializeChooseWaitingRoom(data);
             case 8:
                 return deserializeVehicle(data, s);
-
-            default:
+            case 11:
+                return deserializeGameEnded(data);
+            case 12:
+                return deserializeGameId(data);
         }
         return null;
+    }
+
+    private static boolean deserializeGameEnded(byte[] data) {
+        FGameEnded gameEnded = FGameEnded.getRootAsFGameEnded(ByteBuffer.wrap(data));
+        return gameEnded.ended();
     }
 
     /** Funkcja przeprowadzająca serializację obiektów
      * @param data dane do serializacji
      * @param version wersja schematu do użycia
-     * @return
+     * @return tablica bajtów z obiektem zserializowanym
      */
     static byte[] serialize(Object data, int version) {
         switch(version) {
@@ -105,7 +114,7 @@ public class Serialization {
                     city,
                     hostName,
                     room.getClientsLoggedVal(),
-                    room.getClientsMax(),
+                    room.getClientsMax()*2,
                     room.getStatus());
             tab.add(serializedRoom);
         }
@@ -188,7 +197,7 @@ public class Serialization {
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addCity(builder, serializedCity);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax()*2);
         int serializedRoom = mainServer.schemas.FWaitingRoom.FWaitingRoom.endFWaitingRoom(builder);
         builder.finish((serializedRoom));
         return builder.sizedByteArray();
@@ -246,9 +255,9 @@ public class Serialization {
         mainServer.schemas.FGame.FTeam.startFTeam(builder);
         mainServer.schemas.FGame.FTeam.addClients(builder, b);
         serializedTeam[1] = FTeam.endFTeam(builder);
+        int serializedTeamsVector = mainServer.schemas.FGame.FGame.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FGame.FGame.startFGame(builder);
         mainServer.schemas.FGame.FGame.addId(builder, room.getId());
-        int serializedTeamsVector = mainServer.schemas.FGame.FGame.createTeamsVector(builder, serializedTeam);
         mainServer.schemas.FGame.FGame.addTeams(builder, serializedTeamsVector);
         int serializedGame = mainServer.schemas.FGame.FGame.endFGame(builder);
         builder.finish((serializedGame));
@@ -259,6 +268,11 @@ public class Serialization {
         FChooseWaitingRoom chooseWaitingRoom = FChooseWaitingRoom.getRootAsFChooseWaitingRoom(ByteBuffer.wrap(data));
         int roomId = chooseWaitingRoom.id();
         return Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId);
+    }
+
+    private static Object deserializeGameId(byte[] data) {
+        FGameId gameId = FGameId.getRootAsFGameId(ByteBuffer.wrap(data));
+        return gameId.id();
     }
 
     private static Object deserializeNewWaitingRoom(byte[] data, Socket s) {

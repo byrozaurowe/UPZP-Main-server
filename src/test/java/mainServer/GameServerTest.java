@@ -16,11 +16,11 @@ public class GameServerTest {
 
     private static final int PORT = 6666;
 
-    private GameServer gameServer;
+    private PServer gameServer;
 
     @Before
     public void init() {
-        gameServer = new GameServer();
+        gameServer = new PServer();
         gameServer.createGameSocket(PORT);
     }
 

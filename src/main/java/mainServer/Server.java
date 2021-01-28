@@ -12,14 +12,21 @@ import java.util.Set;
 /** Klasa główna serwera */
 public class Server implements Runnable {
     private static Selector selector = null;
-    public static String serverIp;
+    /** Zewnętrzne ip serwera głównego */
+    private String serverIp;
+    /** Koordynator klientów serwera */
     public ClientsCoordinator clientsCoordinator;
+    /** Koordynator waiting roomów serwera */
     public WaitingRoomsCoordinator waitingRoomsCoordinator;
 
+    /** Zwraca zewnętrzne ip serwera
+     * @return zewnętrzne ip serwera głównego
+     */
     public String getIp() {
         return serverIp;
     }
 
+    /** Sprawdza zewnętrzne ip serwera */
     private void checkExternalIp() throws IOException {
         java.net.URL URL = new java.net.URL("http://checkip.amazonaws.com");
         java.net.HttpURLConnection Conn = (HttpURLConnection)URL.openConnection();
@@ -72,12 +79,9 @@ public class Server implements Runnable {
                     }
                     i.remove();
                 }
-            } catch (WrongPacketException e) {
+            } catch (WrongPacketException | IOException | SQLException e) {
                 System.out.println(e.getMessage());
-            } catch (IOException | SQLException e) {
-                System.out.println(e.getMessage());
-            }
-            finally {
+            } finally {
                 selector.selectedKeys().clear();
             }
         }

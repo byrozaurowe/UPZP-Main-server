@@ -9,3 +9,5 @@
 9 - gameStarted: root FGameStarted
 
 10 - game: root FGame
+11 - gameEnded: root FGameEnded
+12 - gameId: root FGameId
