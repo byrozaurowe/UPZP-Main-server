@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="UPZP_GameProcess"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\UPZP-GameProcess\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="main_process_communication_mocker">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 main_process_communication_mocker"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="main_process_communication_mocker/fast">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 main_process_communication_mocker/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_communication_mocker">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 client_communication_mocker"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_communication_mocker/fast">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 client_communication_mocker/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="UPZP_GameProcess">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP_GameProcess" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 UPZP_GameProcess"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="UPZP_GameProcess/fast">
+				<Option output="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP_GameProcess" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mysql"/>
+					<Add directory="/usr/include/asio"/>
+					<Add directory="/snap/flatbuffers/current/include"/>
+					<Add directory="/usr/include/cppconn"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/inc"/>
+					<Add directory="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/inc"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 UPZP_GameProcess/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/client_communication.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/client_communication/client_udp.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/datagram.cpp">
+			<Option target="main_process_communication_mocker"/>
+			<Option target="client_communication_mocker"/>
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/datagram_stream.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/datagram/inc/datagram_stream.h">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/game.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/game_logic.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/player.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/game_logic/team.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/inc/main_process_comm.h">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/main_process_comm/main_process_comm.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/sub_process_settings.cpp">
+			<Option target="UPZP_GameProcess"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/main.cpp">
+			<Option target="client_communication_mocker"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/client_communication_mocker/udp_communication_mocker.cpp">
+			<Option target="client_communication_mocker"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/main.cpp">
+			<Option target="main_process_communication_mocker"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/main_process_communication_mocker/tcp_communication_mocker.cpp">
+			<Option target="main_process_communication_mocker"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP-GameProcess/FindMySQL.cmake">
+			<Option virtualFolder="CMake Files\UPZP-GameProcess\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

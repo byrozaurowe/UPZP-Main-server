@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -43,6 +45,7 @@ public class Server implements Runnable {
         waitingRoomsCoordinator = new WaitingRoomsCoordinator();
         DatabaseHandler.getInstance();
         ServerSocketChannel socket;
+
         try {
             checkExternalIp();
         } catch (IOException e) {

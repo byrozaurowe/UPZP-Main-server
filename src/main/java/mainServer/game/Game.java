@@ -2,6 +2,8 @@ package mainServer.game;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /** Obiekt gra */
 public class Game {
@@ -57,10 +59,11 @@ public class Game {
 
     /** Funkcja uruchamiająca podproces dla danej gry */
     public void runGame() throws IOException {
-        String command = "/home/winchester/Pulpit/UPZP-GameProcess-sending_game_id/UPZP_GameProcess";
+
+        String command = Paths.get(".").normalize().toAbsolutePath() + "/UPZP-GameProcess-sending_game_id/UPZP_GameProcess";
         String arg = " --udp " + udpPort + " --tcp " + tcpPort + " --lat_start " + city.getLatitude() +
                     " --long_start " + city.getLongitude() + " --radius " + city.getRadius() +
-                    " --map " + city.getCityString() + " --id " + id + " --win_points " + 0 +
+                    " --map " + city.getCityString() + " --id " + id + " --win_points " + winPoints +
                     " --spawn_period " + spawnPeriod;
         Process process = Runtime.getRuntime().exec(command+arg);
     }
