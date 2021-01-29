@@ -102,9 +102,15 @@ public class DatabaseHandler {
 
     /** Funkcja czytająca z bazy id wolnej gry */
     public int getFreeGameId() throws SQLException {
-        String query_loggin = "SELECT * FROM stat_map_game ORDER BY id DESC LIMIT 1";
+        String query_loggin = "SELECT game_id FROM stat_map_game ORDER BY game_id DESC LIMIT 1";
         ResultSet rs = stmt.executeQuery(query_loggin);
         rs.next();
-        return (int) rs.getObject(1);
+        int id;
+        try {
+            id = (int) rs.getObject(1);
+        }catch (SQLException e) {
+            return 0;
+        }
+        return id;
     }
 }

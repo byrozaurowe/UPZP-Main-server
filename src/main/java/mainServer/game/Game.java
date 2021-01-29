@@ -20,7 +20,7 @@ public class Game {
     /** Socket do połączenia */
     private Socket socket;
     /** Podproces */
-    private Process process;
+    public Process process;
 
     /** Konstruktor gry
      * @param udpPort Port połączenia UDP

@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /** Obiekt pokój */
 public class WaitingRoom {
@@ -25,8 +27,15 @@ public class WaitingRoom {
     private int clientsMax;
     /** Czy gra jest rozpoczęta */
     private boolean status;
+    /** Max liczba punktów */
+    private int pointMax;
     /** Obiekt rozpoczętej gry */
     public Game game;
+
+    /** Zwraca pointMax pokoju
+     * @return pointMax pokoju
+     */
+    public int getPointMax() { return pointMax; }
 
     /** Ustawia id pokoju
      * @param id nowe id
@@ -207,7 +216,7 @@ public class WaitingRoom {
      */
     boolean startGame() {
         if(canStart()) {
-            game = GamesHandler.newGame(city, id);
+            game = GamesHandler.newGame(city, id, getPointMax());
             for (Team t : getTeams()) {
                 for (Client c : t.clients) {
                     c.enterGame();
@@ -227,21 +236,33 @@ public class WaitingRoom {
 
     /** Odpowiada za zakończenie rozpoczętej gry */
     public void endGame() {
-        for(Team t : getTeams()) {
-            for(Client c : t.clients) {
-                leaveWaitingRoom(c); //TODO ERROR
+        for(Iterator<Team> teamIt = Arrays.stream(getTeams()).iterator(); teamIt.hasNext();) {
+            Team nextTeam = teamIt.next();
+            for(Iterator<Client> clientIt = nextTeam.clients.iterator(); clientIt.hasNext();) {
+                Client next = clientIt.next();
+                System.out.println("Usunięto klienta z drużyny: " + next.getName());
+                next.enterWaitingRoomList();
+                clientIt.remove();
             }
         }
         game = null;
         status = false;
+        Main.server.waitingRoomsCoordinator.removeWaitingRoom(this);
         System.out.println("Gra ukończona, id: " + id);
+        try {
+            Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void addClientToRunningGame(byte[] toSend, Client c, SocketChannel client, byte[] gameStarted) throws IOException {
-        game.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
-        joinTeam(c);
-        client.write(ByteBuffer.wrap(gameStarted));
-        c.enterGame();
+        if(game != null) {
+            game.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
+            joinTeam(c);
+            client.write(ByteBuffer.wrap(gameStarted));
+            c.enterGame();
+        }
     }
 
     /** Sprawdza, czy klient jest hostem
@@ -304,11 +325,11 @@ public class WaitingRoom {
      * @param host klient, który jest administratorem gry
      * @param clientsMax maksymalna liczba graczy w drużynie
      */
-    public WaitingRoom(String city, Client host, int clientsMax) {
+    public WaitingRoom(String city, Client host, int clientsMax, int pointMax) {
         this.city = city;
         this.host = host;
         this.clientsMax = clientsMax;
-
+        this.pointMax = pointMax;
         team1 = new Team(clientsMax);
         team2 = new Team(clientsMax);
         status = false;

@@ -1,0 +1,5 @@
+/home/winchester/Pulpit/MainServer/UPZP-GameProcess-game_debugging/CMakeFiles/rebuild_cache.dir
+/home/winchester/Pulpit/MainServer/UPZP-GameProcess-game_debugging/CMakeFiles/client_communication_mocker.dir
+/home/winchester/Pulpit/MainServer/UPZP-GameProcess-game_debugging/CMakeFiles/UPZP_GameProcess.dir
+/home/winchester/Pulpit/MainServer/UPZP-GameProcess-game_debugging/CMakeFiles/main_process_communication_mocker.dir
+/home/winchester/Pulpit/MainServer/UPZP-GameProcess-game_debugging/CMakeFiles/edit_cache.dir

@@ -3,6 +3,7 @@ package mainServer;
 import com.google.flatbuffers.FlatBufferBuilder;
 import mainServer.game.GamesHandler;
 import mainServer.schemas.FChooseWaitingRoom.FChooseWaitingRoom;
+import mainServer.schemas.FClientId.FClientId;
 import mainServer.schemas.FError.FError;
 import mainServer.schemas.FGame.FTeam;
 import mainServer.schemas.FGame.FVehicle;
@@ -75,6 +76,8 @@ public class Serialization {
                 return serializeGameStarted(data);
             case 10:
                 return serializeGame(data);
+            case 13:
+                return serializeClientId(data);
         }
         return null;
     }
@@ -136,6 +139,13 @@ public class Serialization {
         int ip = builder.createString(Main.server.getIp());
         int test = FGameStarted.createFGameStarted(builder, ip, ((WaitingRoom) room).getUdpPort());
         builder.finish(test);
+        return builder.sizedByteArray();
+    }
+
+    private static byte[] serializeClientId(Object clientId) {
+        FlatBufferBuilder builder = new FlatBufferBuilder(0);
+        int id = FClientId.createFClientId(builder, (int) clientId);
+        builder.finish(id);
         return builder.sizedByteArray();
     }
 
@@ -278,9 +288,10 @@ public class Serialization {
         FNewWaitingRoom newWaitingRoom = FNewWaitingRoom.getRootAsFNewWaitingRoom(ByteBuffer.wrap(data));
         String city = newWaitingRoom.city();
         int clientsMax = newWaitingRoom.clientsMax();
+        int pointsMax = Integer.parseInt(newWaitingRoom.name());
         Client host = Main.server.clientsCoordinator.findClientBySocket(s);
         if(GamesHandler.cities.contains(city)) {
-            return new WaitingRoom(city, host, clientsMax);
+            return new WaitingRoom(city, host, clientsMax, pointsMax);
         } else {
             return false;
         }

@@ -11,3 +11,4 @@
 10 - game: root FGame
 11 - gameEnded: root FGameEnded
 12 - gameId: root FGameId
+13 - clientId: root FClientId

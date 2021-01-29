@@ -32,6 +32,7 @@ public class PacketHandler {
                         toSend = buildError("Błędny login lub hasło");
                     } else {
                         toSend = buildWaitingRoomsList();
+                        client.write(ByteBuffer.wrap(buildClientId(c.getId())));
                     }
                     break;
                 case 3:
@@ -81,13 +82,15 @@ public class PacketHandler {
                             }
                         }
                     } else {
-                        toSend = buildError("Klient już dołączył do innej gry. Opuszczanie...");
-                        client.write(ByteBuffer.wrap(toSend));
-                        Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c).leaveWaitingRoom(c);
-                        WaitingRoom wr = (WaitingRoom) o;
-                        wr.joinTeam(c);
-                        wr.sendToPlayersInRoom(buildWaitingRoom(wr));
-                        Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                        if(o instanceof WaitingRoom) {
+                            toSend = buildError("Klient już dołączył do innej gry. Opuszczanie...");
+                            client.write(ByteBuffer.wrap(toSend));
+                            Main.server.waitingRoomsCoordinator.getWaitingRoomByClient(c).leaveWaitingRoom(c);
+                            WaitingRoom wr = (WaitingRoom) o;
+                            wr.joinTeam(c);
+                            wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                            Main.server.clientsCoordinator.sendToAllWaitingRoomList();
+                        }
                     }
                     break;
                 case 8:
@@ -100,7 +103,10 @@ public class PacketHandler {
                 case 11:
                     if((Boolean) o) {
                         WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoomBySocket(client.socket());
-                        room.endGame();
+                        if(room != null)
+                            room.endGame();
+                        else
+                            System.out.println("Błąd przy końcu rozgrywki");
                     }
                     break;
                 case 12:
@@ -151,6 +157,15 @@ public class PacketHandler {
         return Header.encode((byte)9, serialized, true);
     }
 
+    /** Buduje client id
+     * @param clientId id klienta
+     * @return pakiet id klienta z headerem
+     */
+    private static byte[] buildClientId(int clientId) {
+        byte[] serialized = Serialization.serialize(clientId, 13);
+        return Header.encode((byte)13, serialized, true);
+    }
+
     /** Rozpoczyna grę
      * @param c host, który ją rozpoczyna
      */
@@ -171,21 +186,5 @@ public class PacketHandler {
     static byte[] buildGame(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 10);
         return Header.encode((byte)10, serialized, false);
-    }
-
-    public static void main(String[] args) {
-        WaitingRoom room = null;
-        Client c = null;
-        try {
-            c = new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket());
-            room = new WaitingRoom("Wrocław",c,2);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        room.setId(1);
-        room.joinTeam(c);
-        byte[] serialized = Serialization.serialize(room, 10);
-        FGame game = FGame.getRootAsFGame(ByteBuffer.wrap(serialized));
-        game.id();
     }
 }

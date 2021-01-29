@@ -36,11 +36,11 @@ public class WaitingRoomsCoordinator {
     public void newWaitingRoom(WaitingRoom waitingRoom) throws IOException, SQLException {
         // przydzielanie id, bedzie do zmiany bo baza musi nam wyslac
         int id = DatabaseHandler.getInstance().getFreeGameId();
-        if(waitingRooms.isEmpty()) {
-            waitingRoom.setId(1);
+        if(id > 0) {
+            waitingRoom.setId(Math.max(id+1, maxId()+1));
         }
         else {
-            waitingRoom.setId(id + 1);
+            waitingRoom.setId(Math.max(1, maxId()+1));
         }
         waitingRooms.add(waitingRoom);
         Main.server.clientsCoordinator.sendToAllWaitingRoomList();
@@ -84,8 +84,13 @@ public class WaitingRoomsCoordinator {
         return null;
     }
 
+    /** Tworzenie kopii obiektu waitingroom ale z jedym graczem, który dołącza w trakcie
+     * @param room
+     * @param client
+     * @return
+     */
     public WaitingRoom cloneWaitingRoom(WaitingRoom room, Client client) {
-        WaitingRoom new_room = new WaitingRoom(room.getCity(), room.getHost(), room.getClientsMax());
+        WaitingRoom new_room = new WaitingRoom(room.getCity(), room.getHost(), room.getClientsMax(), room.getPointMax());
         new_room.setId(room.getId());
         int team = room.checkTeamToJoin();
         if(team == -1)
@@ -97,5 +102,14 @@ public class WaitingRoomsCoordinator {
     public void kickFromWaitingRoom(Client c) {
         WaitingRoom wr = getWaitingRoomByClient(c);
         wr.leaveWaitingRoom(c);
+    }
+
+    private int maxId() {
+        int max = 0;
+        for(WaitingRoom w : waitingRooms) {
+            if (w.getId() > max)
+                max = w.getId();
+        }
+        return max;
     }
 }

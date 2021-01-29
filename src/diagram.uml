@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="708.2989849955871" y="0.0">mainServer.Vehicle</node>
+    <node x="1048.4132391879966" y="530.0">mainServer.CRC</node>
+    <node x="250.24468961459297" y="0.0">mainServer.DatabaseHandler</node>
+    <node x="0.0" y="820.0">mainServer.GameServer</node>
+    <node x="808.1817047030645" y="630.0">mainServer.Serialization</node>
+    <node x="828.0489849955871" y="230.0">mainServer.game.City</node>
+    <node x="328.29898499558715" y="320.0">mainServer.Server</node>
+    <node x="774.8364666078263" y="320.0">mainServer.game.Game</node>
+    <node x="774.503133274493" y="400.0">mainServer.game.GamesHandler</node>
+    <node x="78.24468961459297" y="0.0">mainServer.logging.LoggingClient</node>
+    <node x="152.63949691085656" y="230.0">mainServer.ClientsCoordinator</node>
+    <node x="564.3071785819361" y="530.0">mainServer.WaitingRoom</node>
+    <node x="544.2989849955871" y="0.0">mainServer.ClientStatus</node>
+    <node x="713.3917769932333" y="230.0">mainServer.Team</node>
+    <node x="623.9738452486027" y="740.0">mainServer.PacketHandler</node>
+    <node x="1036.4132391879966" y="630.0">mainServer.Header</node>
+    <node x="21.24468961459297" y="100.0">mainServer.logging.LoginHandler</node>
+    <node x="303.05717858193606" y="400.0">mainServer.Main</node>
+    <node x="386.79898499558715" y="230.0">mainServer.WaitingRoomsCoordinator</node>
+    <node x="617.4751103265667" y="100.0">mainServer.Client</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="mainServer.game.GamesHandler" target="mainServer.game.City">
+      <point x="18.0" y="-15.0" />
+      <point x="864.503133274493" y="380.0" />
+      <point x="877.003133274493" y="380.0" />
+      <point x="877.003133274493" y="300.0" />
+      <point x="878.0489849955871" y="300.0" />
+      <point x="9.999999999999972" y="15.0" />
+    </edge>
+    <edge source="mainServer.Main" target="mainServer.GameServer">
+      <point x="-32.0" y="15.0" />
+      <point x="311.05717858193606" y="500.0" />
+      <point x="20.998984995587193" y="500.0" />
+      <point x="-42.66666666666663" y="-15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.ClientStatus">
+      <point x="53.200000000000045" y="-15.0" />
+      <point x="753.1738452486028" y="710.0" />
+      <point x="1025.9132391879966" y="710.0" />
+      <point x="1025.9132391879966" y="60.0" />
+      <point x="670.2989849955871" y="60.0" />
+      <point x="54.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.WaitingRoom">
+      <point x="-22.799999999999955" y="-15.0" />
+      <point x="677.1738452486028" y="690.0" />
+      <point x="592.8071785819361" y="690.0" />
+      <point x="592.8071785819361" y="610.0" />
+      <point x="581.3071785819361" y="610.0" />
+      <point x="-51.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Client" target="mainServer.Vehicle">
+      <point x="12.0" y="-15.0" />
+      <point x="677.4751103265667" y="70.0" />
+      <point x="716.9656516622539" y="70.0" />
+      <point x="-43.33333333333326" y="15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.Main">
+      <point x="-24.0" y="15.0" />
+      <point x="224.63949691085656" y="370.0" />
+      <point x="327.05717858193606" y="370.0" />
+      <point x="-16.0" y="-15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.Client">
+      <point x="42.666666666666686" y="-15.0" />
+      <point x="291.30616357752325" y="160.0" />
+      <point x="621.838746690203" y="160.0" />
+      <point x="-43.636363636363626" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoomsCoordinator" target="mainServer.Main">
+      <point x="-19.33333333333337" y="15.0" />
+      <point x="483.4656516622538" y="300.0" />
+      <point x="509.7781406295969" y="300.0" />
+      <point x="509.7781406295969" y="380.0" />
+      <point x="375.05717858193606" y="380.0" />
+      <point x="32.0" y="-15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.logging.LoggingClient">
+      <point x="-21.333333333333314" y="-15.0" />
+      <point x="227.30616357752325" y="210.0" />
+      <point x="217.96666666666664" y="210.0" />
+      <point x="217.96666666666664" y="60.0" />
+      <point x="211.24468961459297" y="60.0" />
+      <point x="57.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Team" target="mainServer.Client">
+      <point x="-32.0" y="-15.0" />
+      <point x="721.3917769932333" y="210.0" />
+      <point x="674.2023830538394" y="210.0" />
+      <point x="8.727272727272748" y="15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.Header">
+      <point x="68.39999999999998" y="-15.0" />
+      <point x="768.3738452486027" y="720.0" />
+      <point x="1084.4132391879966" y="720.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.game.GamesHandler" target="mainServer.game.Game">
+      <point x="-54.0" y="-15.0" />
+      <point x="792.503133274493" y="380.0" />
+      <point x="814.8364666078263" y="380.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.WaitingRoom">
+      <point x="-43.428571428571445" y="-15.0" />
+      <point x="840.753133274493" y="590.0" />
+      <point x="649.3071785819361" y="590.0" />
+      <point x="17.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Client" target="mainServer.ClientStatus">
+      <point x="-36.0" y="-15.0" />
+      <point x="629.4751103265667" y="80.0" />
+      <point x="598.2989849955871" y="80.0" />
+      <point x="-18.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.logging.LoginHandler">
+      <point x="-85.33333333333326" y="-15.0" />
+      <point x="163.3061635775233" y="210.0" />
+      <point x="129.24468961459297" y="210.0" />
+      <point x="36.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoom" target="mainServer.Main">
+      <point x="-61.818181818181756" y="-15.0" />
+      <point x="570.4889967637544" y="510.0" />
+      <point x="375.05717858193606" y="510.0" />
+      <point x="32.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Server" target="mainServer.ClientsCoordinator">
+      <point x="-38.400000000000034" y="-15.0" />
+      <point x="337.8989849955871" y="300.0" />
+      <point x="272.63949691085656" y="300.0" />
+      <point x="24.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoom" target="mainServer.game.GamesHandler">
+      <point x="61.818181818181756" y="-15.0" />
+      <point x="694.1253604001179" y="510.0" />
+      <point x="810.503133274493" y="510.0" />
+      <point x="-36.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.logging.LoginHandler" target="mainServer.logging.LoggingClient">
+      <point x="-36.0" y="-15.0" />
+      <point x="57.24468961459297" y="80.0" />
+      <point x="97.24468961459297" y="80.0" />
+      <point x="-57.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.DatabaseHandler">
+      <point x="0.0" y="-15.0" />
+      <point x="248.63949691085656" y="210.0" />
+      <point x="253.8061635775233" y="210.0" />
+      <point x="253.8061635775233" y="80.0" />
+      <point x="313.24468961459297" y="80.0" />
+      <point x="-21.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.Team">
+      <point x="21.71428571428578" y="-15.0" />
+      <point x="905.8959904173503" y="590.0" />
+      <point x="929.003133274493" y="590.0" />
+      <point x="929.003133274493" y="280.0" />
+      <point x="783.3917769932333" y="280.0" />
+      <point x="30.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.Serialization">
+      <point x="7.600000000000023" y="-15.0" />
+      <point x="707.5738452486028" y="680.0" />
+      <point x="884.1817047030645" y="680.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Header" target="mainServer.CRC">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Server" target="mainServer.DatabaseHandler">
+      <point x="0.0" y="-15.0" />
+      <point x="376.29898499558715" y="70.0" />
+      <point x="355.24468961459297" y="70.0" />
+      <point x="21.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.logging.LoginHandler" target="mainServer.DatabaseHandler">
+      <point x="36.0" y="-15.0" />
+      <point x="129.24468961459297" y="70.0" />
+      <point x="271.24468961459297" y="70.0" />
+      <point x="-63.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoomsCoordinator" target="mainServer.DatabaseHandler">
+      <point x="-58.0" y="-15.0" />
+      <point x="444.79898499558715" y="70.0" />
+      <point x="397.24468961459297" y="70.0" />
+      <point x="63.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoomsCoordinator" target="mainServer.WaitingRoom">
+      <point x="58.0" y="15.0" />
+      <point x="560.7989849955871" y="290.0" />
+      <point x="538.9738452486026" y="290.0" />
+      <point x="538.9738452486026" y="490.0" />
+      <point x="595.2162694910269" y="490.0" />
+      <point x="-37.09090909090912" y="-15.0" />
+    </edge>
+    <edge source="mainServer.GameServer" target="mainServer.PacketHandler">
+      <point x="42.66666666666663" y="-15.0" />
+      <point x="106.66666666666663" y="795.0" />
+      <point x="699.9738452486027" y="795.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Main" target="mainServer.Server">
+      <point x="0.0" y="-15.0" />
+      <point x="343.05717858193606" y="380.0" />
+      <point x="344.29898499558715" y="380.0" />
+      <point x="-32.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.game.Game" target="mainServer.game.City">
+      <point x="-20.0" y="-15.0" />
+      <point x="794.8364666078263" y="290.0" />
+      <point x="838.0489849955871" y="290.0" />
+      <point x="-30.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.Main">
+      <point x="-65.14285714285711" y="-15.0" />
+      <point x="819.0388475602074" y="600.0" />
+      <point x="356.55717858193606" y="600.0" />
+      <point x="356.55717858193606" y="510.0" />
+      <point x="359.05717858193606" y="510.0" />
+      <point x="16.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoom" target="mainServer.Client">
+      <point x="0.0" y="-15.0" />
+      <point x="632.3071785819361" y="460.0" />
+      <point x="640.2989849955871" y="460.0" />
+      <point x="640.2989849955871" y="210.0" />
+      <point x="665.4751103265667" y="210.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.ClientStatus">
+      <point x="21.33333333333337" y="-15.0" />
+      <point x="269.97283024418994" y="150.0" />
+      <point x="354.71666666666664" y="150.0" />
+      <point x="354.71666666666664" y="80.0" />
+      <point x="562.2989849955871" y="80.0" />
+      <point x="-54.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.logging.LoginHandler" target="mainServer.Main">
+      <point x="-36.0" y="15.0" />
+      <point x="57.24468961459297" y="380.0" />
+      <point x="311.05717858193606" y="380.0" />
+      <point x="-32.0" y="-15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.Main">
+      <point x="-53.19999999999993" y="-15.0" />
+      <point x="646.7738452486028" y="710.0" />
+      <point x="345.55717858193606" y="710.0" />
+      <point x="345.55717858193606" y="510.0" />
+      <point x="343.05717858193606" y="510.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.Client">
+      <point x="43.42857142857133" y="-15.0" />
+      <point x="927.6102761316358" y="600.0" />
+      <point x="951.2541482789059" y="600.0" />
+      <point x="951.2541482789059" y="190.0" />
+      <point x="691.6569285083848" y="190.0" />
+      <point x="26.18181818181813" y="15.0" />
+    </edge>
+    <edge source="mainServer.PacketHandler" target="mainServer.Client">
+      <point x="22.799999999999955" y="-15.0" />
+      <point x="722.7738452486027" y="690.0" />
+      <point x="1003.9132391879967" y="690.0" />
+      <point x="1003.9132391879967" y="180.0" />
+      <point x="700.3842012356575" y="180.0" />
+      <point x="34.90909090909088" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.Vehicle">
+      <point x="65.14285714285711" y="-15.0" />
+      <point x="949.3245618459216" y="610.0" />
+      <point x="989.4132391879967" y="610.0" />
+      <point x="989.4132391879967" y="80.0" />
+      <point x="803.6323183289204" y="80.0" />
+      <point x="43.33333333333326" y="15.0" />
+    </edge>
+    <edge source="mainServer.Server" target="mainServer.WaitingRoomsCoordinator">
+      <point x="19.19999999999999" y="-15.0" />
+      <point x="395.49898499558714" y="300.0" />
+      <point x="406.1323183289205" y="300.0" />
+      <point x="-96.66666666666663" y="15.0" />
+    </edge>
+    <edge source="mainServer.Team" target="mainServer.Vehicle">
+      <point x="0.0" y="-15.0" />
+      <point x="753.3917769932333" y="210.0" />
+      <point x="754.7989849955871" y="210.0" />
+      <point x="754.7989849955871" y="80.0" />
+      <point x="751.6323183289204" y="80.0" />
+      <point x="-8.666666666666742" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoomsCoordinator" target="mainServer.Client">
+      <point x="58.0" y="-15.0" />
+      <point x="560.7989849955871" y="190.0" />
+      <point x="648.0205648720212" y="190.0" />
+      <point x="-17.454545454545496" y="15.0" />
+    </edge>
+    <edge source="mainServer.Serialization" target="mainServer.game.GamesHandler">
+      <point x="0.0" y="-15.0" />
+      <point x="884.1817047030645" y="610.0" />
+      <point x="882.503133274493" y="610.0" />
+      <point x="36.00000000000003" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoom" target="mainServer.game.Game">
+      <point x="49.454545454545496" y="-15.0" />
+      <point x="681.7617240364816" y="500.0" />
+      <point x="764.003133274493" y="500.0" />
+      <point x="764.003133274493" y="370.0" />
+      <point x="788.1697999411597" y="370.0" />
+      <point x="-26.66666666666663" y="15.0" />
+    </edge>
+    <edge source="mainServer.WaitingRoom" target="mainServer.Team">
+      <point x="24.727272727272748" y="-15.0" />
+      <point x="657.0344513092089" y="480.0" />
+      <point x="711.8364666078263" y="480.0" />
+      <point x="711.8364666078263" y="290.0" />
+      <point x="743.3917769932333" y="290.0" />
+      <point x="-10.0" y="15.0" />
+    </edge>
+    <edge source="mainServer.ClientsCoordinator" target="mainServer.PacketHandler">
+      <point x="-72.0" y="15.0" />
+      <point x="176.63949691085656" y="300.0" />
+      <point x="46.24468961459297" y="300.0" />
+      <point x="46.24468961459297" y="720.0" />
+      <point x="631.5738452486028" y="720.0" />
+      <point x="-68.39999999999998" y="-15.0" />
+    </edge>
+    <edge source="mainServer.Server" target="mainServer.PacketHandler">
+      <point x="32.0" y="15.0" />
+      <point x="408.29898499558715" y="370.0" />
+      <point x="393.55717858193606" y="370.0" />
+      <point x="393.55717858193606" y="700.0" />
+      <point x="661.9738452486027" y="700.0" />
+      <point x="-38.0" y="-15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="615.0" y="278.0" />
+  <SelectedNodes>
+    <node>mainServer.Vehicle</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
