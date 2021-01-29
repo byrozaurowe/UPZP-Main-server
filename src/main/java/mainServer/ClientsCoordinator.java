@@ -35,17 +35,11 @@ public class ClientsCoordinator {
     /** Dodaje klenta po zweryfikowaniu danych
      * @param loggingClient klient, którego zweryfikowano
      */
-    public void addClient(LoggingClient loggingClient) {
+    public void addClient(LoggingClient loggingClient, int id) {
         Client client = new Client(loggingClient.getName(),
                                    loggingClient.getIpAddress(),
                                    loggingClient.getSocket());
-        // przydzielanie ip, bedzie do zmiany bo baza musi nam wyslac
-        if(clients.isEmpty()) {
-            client.setId(1);
-        }
-        else {
-            client.setId(clients.get(clients.size()-1).getId() + 1);
-        }
+        client.setId(id);
         clients.add(client);
         loggingClients.remove(loggingClient);
     }
@@ -104,6 +98,8 @@ public class ClientsCoordinator {
         try {
             Client client = findClientBySocket(s);
             System.out.println("Rozłączono " + client.getName() +": " + client.getSocket());
+            if(client.getClientStatus() == ClientStatus.IN_GAME)
+                Main.server.waitingRoomsCoordinator.kickFromWaitingRoom(client);
             client.getSocket().close();
             DatabaseHandler.getInstance().playerDisconnected(findClientBySocket(s).getId());
             clients.remove(client);

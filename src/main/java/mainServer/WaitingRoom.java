@@ -6,6 +6,7 @@ import mainServer.game.GamesHandler;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
 /** Obiekt pokój */
@@ -54,7 +55,12 @@ public class WaitingRoom {
     /** Zwraca id osoby, która jest hostem
      * @return id hosta
      */
-    public int getHost() { return host.getId(); }
+    public int getHostId() { return host.getId(); }
+
+    /** Zwraca osobę, która jest hostem
+     * @return host
+     */
+    public Client getHost() { return host; }
 
     /** Zwraca nazwę hosta
      * @return nazwa hosta w formie stringa
@@ -121,6 +127,8 @@ public class WaitingRoom {
     public boolean leaveWaitingRoom(Client client) {
         if(isHost(client)){
             if(!changeHost()) {
+                if(game != null)
+                    game.killGame();
                 Main.server.waitingRoomsCoordinator.removeWaitingRoom(this);
                 client.enterWaitingRoomList();
                 return true;
@@ -162,6 +170,31 @@ public class WaitingRoom {
         }
     }
 
+    /** Funkcja dołączająca klienta do drużyny
+     * @param client klient
+     * @return czy się powiodło?
+     */
+    public boolean joinTeam(Client client, int team) {
+        if(getTeams()[team].joinTeam(client)) {
+            return true;
+        }
+        else {
+            return getTeams()[(team+1)%2].joinTeam(client);
+        }
+    }
+
+    public int checkTeamToJoin() {
+        if(team1.clientsSize() <= team2.clientsSize() && team1.canJoin()) {
+            return 0;
+        }
+        else if(team1.clientsSize() > team2.clientsSize() && team2.canJoin()){
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    }
+
     /** Sprawdza, czy jest wystarczająco dużo osób, by rozpocząć grę
      * @return True / False
      */
@@ -196,12 +229,19 @@ public class WaitingRoom {
     public void endGame() {
         for(Team t : getTeams()) {
             for(Client c : t.clients) {
-                leaveWaitingRoom(c);
+                leaveWaitingRoom(c); //TODO ERROR
             }
         }
         game = null;
         status = false;
         System.out.println("Gra ukończona, id: " + id);
+    }
+
+    void addClientToRunningGame(byte[] toSend, Client c, SocketChannel client, byte[] gameStarted) throws IOException {
+        game.getSocket().getChannel().write(ByteBuffer.wrap(toSend));
+        joinTeam(c);
+        client.write(ByteBuffer.wrap(gameStarted));
+        c.enterGame();
     }
 
     /** Sprawdza, czy klient jest hostem
@@ -248,7 +288,6 @@ public class WaitingRoom {
     public boolean isClientInRoom (Client client) {
         return team1.isClientInTeam(client) || team2.isClientInTeam(client);
     }
-
 
     /** Zwraca drużynę, do której należy klient
      * @param client klient

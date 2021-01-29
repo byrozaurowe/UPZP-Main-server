@@ -196,7 +196,7 @@ public class Serialization {
 
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addTeams(builder, serializedTeamsVector);
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addCity(builder, serializedCity);
-        mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHost());
+        mainServer.schemas.FWaitingRoom.FWaitingRoom.addHost(builder, room.getHostId());
         mainServer.schemas.FWaitingRoom.FWaitingRoom.addClientsMax(builder, room.getClientsMax()*2);
         int serializedRoom = mainServer.schemas.FWaitingRoom.FWaitingRoom.endFWaitingRoom(builder);
         builder.finish((serializedRoom));
@@ -266,8 +266,7 @@ public class Serialization {
 
     private static Object deserializeChooseWaitingRoom(byte[] data) {
         FChooseWaitingRoom chooseWaitingRoom = FChooseWaitingRoom.getRootAsFChooseWaitingRoom(ByteBuffer.wrap(data));
-        int roomId = chooseWaitingRoom.id();
-        return Main.server.waitingRoomsCoordinator.getWaitingRoom(roomId);
+        return chooseWaitingRoom.id();
     }
 
     private static Object deserializeGameId(byte[] data) {

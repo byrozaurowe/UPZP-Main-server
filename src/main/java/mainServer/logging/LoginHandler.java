@@ -17,22 +17,23 @@ public class LoginHandler {
         String name = logClient.getName();
         String password = logClient.getPassword();
         Object o = DatabaseHandler.getInstance().loggIn(name, password);
-        if((Boolean) o) {
-            signIn(logClient);
-            return true;
-        }
-        else {
+        if((int) o <= 0) {
             System.out.println("Błędne logowanie");
             //Main.server.clientsCoordinator.disconnectLoggClient(logClient);
             return false;
+
+        }
+        else {
+            signIn(logClient, (int) o);
+            return true;
         }
     }
 
     /** Logowanie klienta
      * @param loggingClient logujący się klient
      */
-    private static void signIn(LoggingClient loggingClient) {
+    private static void signIn(LoggingClient loggingClient, int id) {
         System.out.println("Dodano zweryfikowanego klienta " + loggingClient.getName());
-        Main.server.clientsCoordinator.addClient(loggingClient);
+        Main.server.clientsCoordinator.addClient(loggingClient, id);
     }
 }

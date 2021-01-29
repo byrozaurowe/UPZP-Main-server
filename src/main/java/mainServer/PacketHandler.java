@@ -1,6 +1,11 @@
 package mainServer;
 
+import mainServer.schemas.FGame.FGame;
+
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.sql.SQLException;
@@ -58,12 +63,22 @@ public class PacketHandler {
                     break;
                 case 6:
                     if(c.getClientStatus() == ClientStatus.WAITING_ROOM_LIST) {
-                        WaitingRoom wr = (WaitingRoom) o;
-                        if(wr.joinTeam(c)) {
-                            wr.sendToPlayersInRoom(buildWaitingRoom(wr));
+                        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoom((int) o);
+                        if(!room.getStatus()) {
+                            if (room.joinTeam(c)) {
+                                room.sendToPlayersInRoom(buildWaitingRoom(room));
+                            } else {
+                                toSend = buildError("Wybrany pokój jest pełny!");
+                            }
                         }
                         else {
-                            toSend = buildError("Wybrany pokój jest pełny!");
+                            WaitingRoom cloned = Main.server.waitingRoomsCoordinator.cloneWaitingRoom(room, c);
+                            if(cloned != null) {
+                                room.addClientToRunningGame(buildGame(cloned), c, client, buildGameStarted(room));
+                            }
+                            else {
+                                toSend = buildError("Gra jest pełna!");
+                            }
                         }
                     } else {
                         toSend = buildError("Klient już dołączył do innej gry. Opuszczanie...");
@@ -92,7 +107,7 @@ public class PacketHandler {
                     int gameId = (int) o;
                     WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoom(gameId);
                     room.setGameSocket(client.socket());
-                    client.write(ByteBuffer.wrap(buildGame(gameId)));
+                    client.write(ByteBuffer.wrap(buildGame(room)));
                     break;
             }
         }
@@ -150,12 +165,27 @@ public class PacketHandler {
     }
 
     /** Buduje pakiet z grą
-     * @param id id gry, która się rozpoczyna
+     * @param room id gry, która się rozpoczyna
      * @return zserializowana gra z headerem
      */
-    static byte[] buildGame(int id) {
-        WaitingRoom room = Main.server.waitingRoomsCoordinator.getWaitingRoom(id);
+    static byte[] buildGame(WaitingRoom room) {
         byte[] serialized = Serialization.serialize(room, 10);
-        return Header.encode((byte)10, serialized, true);
+        return Header.encode((byte)10, serialized, false);
+    }
+
+    public static void main(String[] args) {
+        WaitingRoom room = null;
+        Client c = null;
+        try {
+            c = new Client("Wojtek", InetAddress.getByName("127.0.0.1"), new Socket());
+            room = new WaitingRoom("Wrocław",c,2);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        room.setId(1);
+        room.joinTeam(c);
+        byte[] serialized = Serialization.serialize(room, 10);
+        FGame game = FGame.getRootAsFGame(ByteBuffer.wrap(serialized));
+        game.id();
     }
 }

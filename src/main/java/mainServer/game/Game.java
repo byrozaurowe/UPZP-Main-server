@@ -2,7 +2,6 @@ package mainServer.game;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /** Obiekt gra */
@@ -20,6 +19,8 @@ public class Game {
     private City city;
     /** Socket do połączenia */
     private Socket socket;
+    /** Podproces */
+    private Process process;
 
     /** Konstruktor gry
      * @param udpPort Port połączenia UDP
@@ -60,11 +61,16 @@ public class Game {
     /** Funkcja uruchamiająca podproces dla danej gry */
     public void runGame() throws IOException {
 
-        String command = Paths.get(".").normalize().toAbsolutePath() + "/UPZP-GameProcess-sending_game_id/UPZP_GameProcess";
+        String command = Paths.get(".").normalize().toAbsolutePath() + "/UPZP-GameProcess-game_debugging/UPZP_GameProcess";
         String arg = " --udp " + udpPort + " --tcp " + tcpPort + " --lat_start " + city.getLatitude() +
                     " --long_start " + city.getLongitude() + " --radius " + city.getRadius() +
                     " --map " + city.getCityString() + " --id " + id + " --win_points " + winPoints +
                     " --spawn_period " + spawnPeriod;
-        Process process = Runtime.getRuntime().exec(command+arg);
+        this.process = Runtime.getRuntime().exec(command+arg);
+    }
+
+    public void killGame() {
+        this.process.destroy();
+        System.out.println("Gra " + id + " na mapie " + city.getCityString() + " skończyła się przedwcześnie");
     }
 }

@@ -31,23 +31,23 @@ public class GamesHandler {
         City city;
         switch (cityName) {
             case "Wrocław":
-                city = new City(51.10000, 17.03333, 15, cityName);
+                city = new City(51.10000, 17.03333, 1500, cityName);
                 break;
             case "Nowy Jork":
-                city = new City(40.7142700, -74.0059700, 20, cityName);
+                city = new City(40.7142700, -74.0059700, 2000, cityName);
                 break;
             case "Amsterdam":
-                city = new City(52.3740300, 4.8896900, 20, cityName);
+                city = new City(52.3740300, 4.8896900, 2000, cityName);
                 break;
             case "Kopenhaga":
-                city = new City(55.6759400, 12.5655300, 20, cityName);
+                city = new City(55.6759400, 12.5655300, 2000, cityName);
                 break;
             case "Helsinki":
-                city = new City(60.1695200, 24.9354500, 20, cityName);
+                city = new City(60.1695200, 24.9354500, 200, cityName);
                 break;
             default:
                 return null;
         }
-        return new Game(udp, tcp, 20, 10, city, gameId);
+        return new Game(udp, tcp, 200, 10, city, gameId);
     }
 }

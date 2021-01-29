@@ -60,6 +60,13 @@ public class Team {
         else return false;
     }
 
+    /** Czy użytkownik może dołączyć do drużyny?
+     * @return True / False
+     */
+    boolean canJoin() {
+        return clients.size() <= maxSize;
+    }
+
     /** Czy podany klient jest członkiem drużyny?
      * @param client klient
      * @return True / False

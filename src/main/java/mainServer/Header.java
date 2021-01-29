@@ -16,9 +16,9 @@ public class Header {
     /** Sekwencja rozpoczynająca header */
     private static final byte[] BEGINSEQ = CRC.hexStringToLittleEndianByteArray("ABDA");
     /** Jedynka jako bajt */
-    private static byte res1 = (byte)1;
+    private static byte res1 = (byte)0b10000000;
     /** Zero jako bajt */
-    private static byte res = (byte)0;
+    private static byte res = (byte)00000000;
 
     /** Klasa return*/
     static class Return {
@@ -47,7 +47,7 @@ public class Header {
             throw new WrongPacketException("Wrong begin sequence");
         }
         byte version = receivedData[2];
-        boolean isChecksum = (receivedData[3] % 2) == 1;
+        boolean isChecksum = (receivedData[3] & (1 << 7)) != 0;
 
         byte[] payloadLengthTab = subArray(receivedData, 4, 7);
         int payloadLength = ByteBuffer.wrap(payloadLengthTab).
@@ -102,9 +102,11 @@ public class Header {
             byte[] byteArray = CRC.crc32(data);
             addAll(byteArray, encoded);
         }
-        else
+        else {
             encoded.add(res);
-
+            byte[] checksumLength = intToLittleEndian(data.length, 4);
+            addAll(checksumLength, encoded);
+        }
         encoded.add(res);
         encoded.add(res);
 

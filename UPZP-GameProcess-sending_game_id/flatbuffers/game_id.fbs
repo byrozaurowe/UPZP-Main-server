@@ -1,7 +1,0 @@
-namespace mainServer.schemas.FGameId;
-
-table FGameId {
-    id:int;
-}
-
-root_type FGameId;

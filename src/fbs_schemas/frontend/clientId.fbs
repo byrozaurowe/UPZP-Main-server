@@ -1,0 +1,7 @@
+namespace mainServer.schemas.FClientId;
+
+table FClientId {
+    id:int;
+}
+
+root_type FClientId;

@@ -83,4 +83,19 @@ public class WaitingRoomsCoordinator {
         }
         return null;
     }
+
+    public WaitingRoom cloneWaitingRoom(WaitingRoom room, Client client) {
+        WaitingRoom new_room = new WaitingRoom(room.getCity(), room.getHost(), room.getClientsMax());
+        new_room.setId(room.getId());
+        int team = room.checkTeamToJoin();
+        if(team == -1)
+            return null;
+        new_room.joinTeam(client, team);
+        return new_room;
+    }
+
+    public void kickFromWaitingRoom(Client c) {
+        WaitingRoom wr = getWaitingRoomByClient(c);
+        wr.leaveWaitingRoom(c);
+    }
 }

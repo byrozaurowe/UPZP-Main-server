@@ -1,1 +1,0 @@
-/usr/bin/c++   -pthread -g   CMakeFiles/main_process_communication_mocker.dir/main_process_communication_mocker/main.cpp.o CMakeFiles/main_process_communication_mocker.dir/UPZP-GameProcess/datagram/datagram.cpp.o CMakeFiles/main_process_communication_mocker.dir/main_process_communication_mocker/tcp_communication_mocker.cpp.o  -o main_process_communication_mocker 
